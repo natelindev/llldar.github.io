@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nathaniel的博客">
+    <meta name="keyword"  content="博客 极客 程序员 技术">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          星际争霸AI编写环境搭建教程 - Nathaniel的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://blog.nathaniel-lin.me/2017/01/27/bwapi-usage/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Nathaniel&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-bwapi-usage.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#星际争霸" title="星际争霸">星际争霸</a>
+                        
+                          <a class="tag" href="/tags/#AI" title="AI">AI</a>
+                        
+                          <a class="tag" href="/tags/#人工智能" title="人工智能">人工智能</a>
+                        
+                          <a class="tag" href="/tags/#环境搭建" title="环境搭建">环境搭建</a>
+                        
+
+                    </div>
+                    <h1>星际争霸AI编写环境搭建教程</h1>
+                    <h2 class="subheading">BWAPI的使用</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2017-01-27
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="星际争霸AI编写环境搭建教程"><a href="#星际争霸AI编写环境搭建教程" class="headerlink" title="星际争霸AI编写环境搭建教程"></a>星际争霸AI编写环境搭建教程</h1><blockquote>
+<p>Power Overwhelming</p>
+</blockquote>
+<h3 id="星际争霸是什么？"><a href="#星际争霸是什么？" class="headerlink" title="星际争霸是什么？"></a>星际争霸是什么？</h3><p>星际争霸是<a href="blizzard.com">暴雪</a>公司旗下的一款即时策略类游戏(RTS)，游戏中，玩家可选择 人类、星灵、异虫 三个种族，进行资源采集和因资源的争夺而引起的战斗。战役部分在此不予详述，自定义战斗的终极目标就是消灭敌人的所有建筑物。</p>
+<h3 id="为什么选择星际争霸1？"><a href="#为什么选择星际争霸1？" class="headerlink" title="为什么选择星际争霸1？"></a>为什么选择星际争霸1？</h3><p>答案当然是库的支持，星际争霸2尚未有相关支持代码操纵游戏的库，同时通过对屏幕分析从而获取游戏内信息的方式也显得难度过高，而AI编写的主要精力应该放在对人工智能的研究上而非游戏具体的操作(Performance)上。因此，星际争霸1显然是更好的选择。其发行多年，版本稳定，对计算机资源消耗较少，最重要的——有强大的库:<a href="http://bwapi.github.io/" target="_blank" rel="external">BWAPI</a>的支持，它允许我们使用简单的函数来操作游戏内单位的动作，同时可以迅速的获取当前游戏状态(game state)</p>
+<h3 id="所以打算进行开发的话我需要哪些东西？"><a href="#所以打算进行开发的话我需要哪些东西？" class="headerlink" title="所以打算进行开发的话我需要哪些东西？"></a>所以打算进行开发的话我需要哪些东西？</h3><p>这里给出了一份清单，确保你有以下这些东西:</p>
+<ol>
+<li><a href="https://pan.baidu.com/s/1c0xUPTu" target="_blank" rel="external">星际争霸 1.16.1</a></li>
+<li><a href="https://github.com/bwapi/bwapi/releases/tag/v4.1.2" target="_blank" rel="external">BWAPI 4.1.2</a></li>
+<li><a href="https://bitbucket.org/auriarte/bwta2/downloads" target="_blank" rel="external">BWTA2.2</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/dd831853(v=vs.120" target="_blank" rel="external">Visual Studio 2013</a>.aspx)</li>
+</ol>
+<h3 id="有了这些东西之后呢？"><a href="#有了这些东西之后呢？" class="headerlink" title="有了这些东西之后呢？"></a>有了这些东西之后呢？</h3><ol>
+<li>第一步当然是安装星际争霸了，上面给出的链接解压即可运行</li>
+<li>安装BWAPI和BATA库，用于支持我们所写代码的运行，具体方法就是双击安装包并且不断地下一步，注意记好选择的安装的位置，之后要用到</li>
+<li>右键单击我的电脑-&gt;属性-&gt;高级系统设置-&gt;环境变量</li>
+<li>新建一个名叫<code>BWTA_DIR</code>的环境变量，内容是你的<code>BWTA</code>库安装的目录</li>
+<li>新建一个名叫<code>BWAPI_DIR</code>的环境变量，内容是你的<code>BWAPI</code>库安装的目录</li>
+<li>以管理员身份运行安装完<code>BWAPI</code>所得到的<code>Chaoslauncher.exe</code></li>
+<li>根据你在VS2013中build你的AI的模式选择这里的执行模式，如果是<code>debug</code>就选择<code>debug</code>运行模式，否则就选<code>release</code></li>
+<li>选择好后此时要单击下方的<code>config</code>按钮，修改打开的<code>config文件</code>，其中：<br>{0}. ai=你的AI对应的dll文件所在位置 例：C:\Users\Nathaniel\Desktop\F92\F92\bin\F92.dll<br>{0}. ai_dbg=你用debug模式生成的dll文件所在的位置</li>
+<li>此时算是配置完成了，点击<code>start</code>按钮，打开星际争霸1，随便开启一局游戏，即可得到AI控制游戏的效果</li>
+</ol>
+<h3 id="关于生成"><a href="#关于生成" class="headerlink" title="关于生成"></a>关于生成</h3><p>当然上面没说<code>dll</code>文件是哪来的。自然，你需要自己写一个，或者从别人那下载一个，或者是从别人那里clone来的代码然后根据代码生成一个。(欢迎clone 我的<a href="https://github.com/llldar/F92" target="_blank" rel="external">repo</a>)，生成的时候，记得修改对应的config文件位置为你的实际config文件地址。这里注意，由于Windows使用了<code>\</code>作为目录间隔符,所以在代码中应使用<code>\\</code>来消除转义效果。</p>
+<p>理论上，上面这些做好了之后，环境变量设置无误的话，就可以正常生成了，生成的产品自然是一个<code>dll</code>文件，之后，我们便可以使用这个生成的dll文件进行测试了。</p>
+<h3 id="如何DEBUG-调试"><a href="#如何DEBUG-调试" class="headerlink" title="如何DEBUG(调试)?"></a>如何DEBUG(调试)?</h3><p>自然，有时候我们需要对我们所写的代码进行debug，而dll文件的特殊性使我们的debug较为特殊，下面是步骤：</p>
+<ol>
+<li>在VS中生成时选debug模式</li>
+<li>Chaoslauncher中选择debug模式加载带dbg后缀的dll文件</li>
+<li>运行星际，但是不要开始游戏</li>
+<li>Vs中选择 调试-&gt;附加到进程-&gt;显示所有用户的进程-&gt;找到starcraft.exe-&gt;选中</li>
+<li>这时候可能VS需要重启，没关系，让他重启</li>
+<li>在星际里面开始游戏</li>
+<li>这时候debug模式下，可以单步执行代码，进行调试了</li>
+</ol>
+<h3 id="其他小细节"><a href="#其他小细节" class="headerlink" title="其他小细节"></a>其他小细节</h3><ul>
+<li>config文件内的dll目录只需要一个<code>\</code>即可，另外也可以使用相对目录</li>
+<li>Chaoslauncher中勾选<code>W-MODE</code>可以以窗口模式进行游戏，方便在游戏与代码之间切换</li>
+</ul>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/03/24/compile-linux-kernel/" data-toggle="tooltip" data-placement="top" title="Linux内核编译">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/12/31/howdowemakeprogress/" data-toggle="tooltip" data-placement="top" title="一个人究竟怎样进步?">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#随笔" title="随笔" rel="5">随笔</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#工具使用" title="工具使用" rel="3">工具使用</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="undefined" target="_blank">Liu&#39;s Blog</a></li>
+                    
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.com/" target="_blank">Chriskuei&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "llldar";
+    var disqus_identifier = "https://blog.nathaniel-lin.me/2017/01/27/bwapi-usage/";
+    var disqus_url = "https://blog.nathaniel-lin.me/2017/01/27/bwapi-usage/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/machinary">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Nathaniel&#39;s Blog 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+<!-- JQuery UI -->
+<script src="/js/jquery-ui.min.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("https://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="https://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://blog.nathaniel-lin.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-77127637-1';
+    var _gaDomain = 'blog.nathaniel-lin.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

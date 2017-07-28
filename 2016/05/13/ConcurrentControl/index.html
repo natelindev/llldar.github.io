@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nathaniel的博客">
+    <meta name="keyword"  content="博客 极客 程序员 技术">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          数据库的并发控制 - Nathaniel的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://blog.nathaniel-lin.me/2016/05/13/ConcurrentControl/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Nathaniel&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-concurrent.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#数据库" title="数据库">数据库</a>
+                        
+                          <a class="tag" href="/tags/#笔记" title="笔记">笔记</a>
+                        
+
+                    </div>
+                    <h1>数据库的并发控制</h1>
+                    <h2 class="subheading">仅做笔记</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2016-05-13
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h1><h3 id="并发控制的主要技术"><a href="#并发控制的主要技术" class="headerlink" title="并发控制的主要技术"></a>并发控制的主要技术</h3><ol>
+<li>封锁(Locking)</li>
+<li>时间戳(Timestamp)</li>
+<li>乐观控制法</li>
+</ol>
+<h3 id="锁的类型"><a href="#锁的类型" class="headerlink" title="锁的类型"></a>锁的类型</h3><ul>
+<li>排他锁    X锁  写锁<ul>
+<li>共享锁S锁读锁</li>
+</ul>
+</li>
+</ul>
+<h3 id="并发事务运行存在的异常问题"><a href="#并发事务运行存在的异常问题" class="headerlink" title="并发事务运行存在的异常问题"></a>并发事务运行存在的异常问题</h3><p>​    并发操作带来的数据不一致性</p>
+<h5 id="丢失更新"><a href="#丢失更新" class="headerlink" title="丢失更新"></a>丢失更新</h5><p>​    两个事务同时读写一个数据</p>
+<p>​    事务2的写影响(覆盖)了事务1的写</p>
+<p>​    导致事务1的结果失效</p>
+<h5 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h5><p>​    三类不可重复读</p>
+<ol>
+<li>T1读两次数据得到不同的值，因为T2修改了该数据</li>
+<li>T1再读的时候数据消失，因为T2删除了该数据</li>
+<li>T1同条件读时多了一些数据，因为T2插入了一些数据</li>
+</ol>
+<h5 id="读“脏”数据"><a href="#读“脏”数据" class="headerlink" title="读“脏”数据"></a>读“脏”数据</h5><p>​    事务2读到了事务1进行中的数据</p>
+<p>​    事务1后来因为某种原因被撤销</p>
+<p>​    事务2读到的数据就是不正确的数据</p>
+<p>​    <u>不一致性是由并发操作引起的</u></p>
+<p>​    主要原因是<u>并发操作破坏了事务的隔离性</u>    </p>
+<h3 id="封锁协议"><a href="#封锁协议" class="headerlink" title="封锁协议"></a>封锁协议</h3><h4 id="1-一级封锁协议"><a href="#1-一级封锁协议" class="headerlink" title="1. 一级封锁协议"></a>1. 一级封锁协议</h4><p>​        修改前加X锁，结束才释放</p>
+<p>​        读数据时不加锁，可能 <a href="#不可重复读">重复读</a> 和 <a href="#读“脏”数据">读“脏数据”</a></p>
+<p>​        可以解决丢失更新</p>
+<h4 id="2-二级封锁协议"><a href="#2-二级封锁协议" class="headerlink" title="2. 二级封锁协议"></a>2. 二级封锁协议</h4><p>​        在一级封锁协议之上 读数据前加 <a href="#锁的类型">S锁</a> 读完之后释放 S锁</p>
+<p>​        可以避免 读“脏数据”</p>
+<h4 id="3-三级封锁协议"><a href="#3-三级封锁协议" class="headerlink" title="3. 三级封锁协议"></a>3. 三级封锁协议</h4><p>​        在二级封锁协议之上 事务结束之后才释放 S锁</p>
+<h3 id="活锁"><a href="#活锁" class="headerlink" title="活锁"></a>活锁</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>​        某个事务由于请求封锁，总也得不到锁而长时间处于等待状态</p>
+<h4 id="如何解决："><a href="#如何解决：" class="headerlink" title="如何解决："></a>如何解决：</h4><p>​        采用先来先服务策略</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>​        同时处于等待状态的2个或多个事务互相封锁了对方请求的资源</p>
+<p>​        使得没有任何事务能够有足够资源运行完毕</p>
+<p>​    解决方法：</p>
+<h4 id="预防死锁"><a href="#预防死锁" class="headerlink" title="预防死锁"></a>预防死锁</h4><h5 id="一次封锁法："><a href="#一次封锁法：" class="headerlink" title="一次封锁法："></a>一次封锁法：</h5><p>​            将事务在执行过程中可能要封锁的数据对象全部加锁</p>
+<p>​            问题：扩大了封锁的范围，降低了并发度</p>
+<h5 id="顺序封锁法："><a href="#顺序封锁法：" class="headerlink" title="顺序封锁法："></a>顺序封锁法：</h5><p>​            事先规定一个封锁顺序，所有事务都按这个顺序封锁</p>
+<p>​            问题：维护成本高，难以实现</p>
+<h5 id="事务重试法："><a href="#事务重试法：" class="headerlink" title="事务重试法："></a>事务重试法：</h5><p>​            使用抢占机制和事务回滚</p>
+<p>​            即后申请的事务可能能够抢占已有锁的事务的锁</p>
+<h5 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h5><p>​            操作系统中的预防死锁的策略 <u>不很适合</u> 数据库的特点</p>
+<p>​            DBMS在解决死锁的问题上 采用的是 <u>诊断并解除死锁</u> 的方法</p>
+<h4 id="死锁的检测与恢复"><a href="#死锁的检测与恢复" class="headerlink" title="死锁的检测与恢复"></a>死锁的检测与恢复</h4><p>​    即允许死锁先发生</p>
+<p>​    由DBMS的并发控制子系统定期检测系统中是否存在死锁        </p>
+<p>​    检测到死锁，选择一个处理死锁代价最小的事务，将其撤消，使其它事务能继续运行。</p>
+<p>​    被撤销的事务回滚</p>
+<h5 id="超时法"><a href="#超时法" class="headerlink" title="超时法"></a>超时法</h5><p>​        如果一个事务等待时间超过了限制，就认为发生了死锁</p>
+<p>​        优点：实现简单    缺点：可能误判 或 发现死锁不及时</p>
+<h5 id="事务等待图法"><a href="#事务等待图法" class="headerlink" title="事务等待图法"></a>事务等待图法</h5><p>​        用事务等待图动态反映所有事务的等待情况</p>
+<p>​        事务等待图是一个有向图 $G=(V,U) $</p>
+<p>​        若$V1$等待$V2$，则$V1$，$V2$之间画一条有向边，从$V1$指向$V2$</p>
+<p>​        周期性检查图中是否有回路 有回路即出现了死锁</p>
+<h5 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h5><p>​        解除死锁的方法是回滚一个或多个相关事务</p>
+<p>​        即选择一个处理死锁代价最小的事务，将其撤消</p>
+<p>​        释放此事务持有的所有的锁，使其它事务能继续运行下去</p>
+<h4 id="两阶段封锁协议"><a href="#两阶段封锁协议" class="headerlink" title="两阶段封锁协议"></a>两阶段封锁协议</h4><p>​        是最常用的一种封锁协议</p>
+<p>​        协议指所有事务必须分两个阶段对数据项加锁和解锁</p>
+<p>​        在对数据进行任何读写操作之前要先获得对该数据的封锁</p>
+<p>​        在释放一个封锁之后,事务不再获得任何其他封锁</p>
+<p>​        <strong>是保证并发调度可串行性的封锁协议</strong></p>
+<h5 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h5><p>​        事务分为两个阶段</p>
+<p>​        第一阶段是获得封锁，也称为扩展阶段</p>
+<p>​        第二阶段是释放封锁，也称为收缩阶段</p>
+<h5 id="充分条件而不是必要条件"><a href="#充分条件而不是必要条件" class="headerlink" title="充分条件而不是必要条件"></a>充分条件而不是必要条件</h5><p>​        <strong>所有遵守两阶段封锁协议的事务，其并行执行的结果一定是正确的</strong></p>
+<p>​        事务遵守两段锁协议是可串行化调度的充分条件，而不是必要条件</p>
+<p>​        可串行化的调度中，不一定所有事务都必须符合两阶段封锁协议</p>
+<p>​        遵守两阶段封锁协议的事务也可能发生死锁</p>
+<h4 id="锁表"><a href="#锁表" class="headerlink" title="锁表"></a>锁表</h4><h5 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h5><p>​        锁的请求、授予和解除是由数据库系统的锁管理器(Lock Manager) 完成</p>
+<p>​        锁管理器为目前已加锁的数据项维护一个记录链表</p>
+<p>​        每个锁请求为一个记录，按请求的到达顺序排序这个表称为<strong>锁表</strong></p>
+<p>​        锁表将数据库元素和封锁信息联系在一起</p>
+<h3 id="多粒度封锁"><a href="#多粒度封锁" class="headerlink" title="多粒度封锁"></a>多粒度封锁</h3><h4 id="封锁粒度"><a href="#封锁粒度" class="headerlink" title="封锁粒度"></a>封锁粒度</h4><h5 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h5><p>​    封锁对象的大小称为封锁粒度</p>
+<p>​    封锁对象可以是逻辑单元（属性至数据库）</p>
+<p>​    也可以是物理单元（数据页）</p>
+<h4 id="多粒度封锁-1"><a href="#多粒度封锁-1" class="headerlink" title="多粒度封锁"></a>多粒度封锁</h4><h5 id="定义-4"><a href="#定义-4" class="headerlink" title="定义"></a>定义</h5><p>​    在一个系统中同时支持多种封锁粒度供不同的事务选择</p>
+<h5 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h5><p>​    选择封锁粒度考虑封锁机构和并发度两个因素</p>
+<p>​    对系统开销与并发度进行权衡</p>
+<table>
+<thead>
+<tr>
+<th>封锁的粒度</th>
+<th>大  $\uparrow$</th>
+<th>小 $\downarrow$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统被封锁的对象</td>
+<td>少  $\downarrow$</td>
+<td>多 $\uparrow$</td>
+</tr>
+<tr>
+<td>并发度</td>
+<td>低  $\downarrow$</td>
+<td>高 $\uparrow$</td>
+</tr>
+<tr>
+<td>系统开销</td>
+<td>小  $\downarrow$</td>
+<td>大 $\uparrow$</td>
+</tr>
+</tbody>
+</table>
+<p>​    <u>多个关系</u>的<u>大量元组</u>的用户事务  $\to$  以数据库为封锁单位</p>
+<p>​    需要处理<u>大量元组</u>的用户事务      $\to$  以关系为封锁单元</p>
+<p>​    只处理<u>少量元组</u>的用户事务          $\to$  以元组为封锁单位</p>
+<h4 id="多粒度树"><a href="#多粒度树" class="headerlink" title="多粒度树"></a>多粒度树</h4><p>​    以树形结构来表示多级封锁粒度</p>
+<p>​    根节点是整个数据库，表示最大的数据粒度</p>
+<p>​    叶结点表示最小的数据粒度</p>
+<h5 id="多粒度封锁协议"><a href="#多粒度封锁协议" class="headerlink" title="多粒度封锁协议"></a>多粒度封锁协议</h5><ul>
+<li><p>允许多粒度树中的每个结点被独立地加锁</p>
+</li>
+<li><p>对一个结点加锁意味着</p>
+<p>这个结点的所有后裔结点也被加以同样类型的锁</p>
+</li>
+<li><p>在多粒度封锁中一个数据对象可能以两种方式封锁,封锁的效果是一样的</p>
+<p>​显式封锁：直接加到数据对象上的封锁</p>
+<p>​隐式封锁：由于其上级结点加锁而使该数据对象加上了锁</p>
+<p>​检查封锁冲突：</p>
+</li>
+</ul>
+<h3 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h3><h5 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h5><p>​    提高对某个数据对象加锁时系统的检查效率</p>
+<h5 id="定义-5"><a href="#定义-5" class="headerlink" title="定义"></a>定义</h5><p>​    对任一结点加基本锁，必须先对它的上层结点加意向锁</p>
+<h4 id="常用意向锁"><a href="#常用意向锁" class="headerlink" title="常用意向锁"></a>常用意向锁</h4><h5 id="意向共享锁-IS锁"><a href="#意向共享锁-IS锁" class="headerlink" title="意向共享锁 IS锁"></a>意向共享锁 IS锁</h5><p>​    表示它的后裔结点拟(意向)加S锁</p>
+<h5 id="意向排它锁-IX锁"><a href="#意向排它锁-IX锁" class="headerlink" title="意向排它锁 IX锁"></a>意向排它锁 IX锁</h5><p>​    表示它的后裔结点拟(意向)加X锁</p>
+<h5 id="共享意向排它锁-SIX锁"><a href="#共享意向排它锁-SIX锁" class="headerlink" title="共享意向排它锁 SIX锁"></a>共享意向排它锁 SIX锁</h5><p>​    表示对它加S锁，再加IX锁</p>
+<h4 id="意向锁的相容矩阵"><a href="#意向锁的相容矩阵" class="headerlink" title="意向锁的相容矩阵"></a>意向锁的相容矩阵</h4><table>
+<thead>
+<tr>
+<th>T1\T2</th>
+<th>S</th>
+<th>X</th>
+<th>IS</th>
+<th>IX</th>
+<th>SIX</th>
+<th>空</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong></td>
+<td>$\surd$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td><strong>IS</strong></td>
+<td>$\surd$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td><strong>IX</strong></td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td><strong>SIX</strong></td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+<td>$\mathsf{X}$</td>
+<td>$\mathsf{X}$</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td><strong>空</strong></td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+</tr>
+</tbody>
+</table>
+<h5 id="锁的强度"><a href="#锁的强度" class="headerlink" title="锁的强度"></a>锁的强度</h5><p>​    锁的强度是指它对其他锁的排斥程度</p>
+<p>​    一个事务在申请封锁时以强锁代替弱锁是安全的，反之则不然</p>
+<p>​    偏序关系 $X \succ SIX \succ S \parallel IX \succ IS \succ 空$</p>
+<h3 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h3><h5 id="定义-6"><a href="#定义-6" class="headerlink" title="定义"></a>定义</h5><p>​    事务准备接受不一致数据的级别称为隔离级别</p>
+<p>​    隔离级别是一个事务必须与其它事务进行隔离的程度</p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>低      $\downarrow$</th>
+<th>高      $\uparrow$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>并发</td>
+<td>增加  $\uparrow$</td>
+<td>降低  $\downarrow$</td>
+</tr>
+<tr>
+<td>数据正确性</td>
+<td>降低  $\downarrow$</td>
+<td>保证  $\uparrow$</td>
+</tr>
+</tbody>
+</table>
+<p>​    申请封锁时应该按自上而下的次序进行</p>
+<p>​    释放封锁时则应该按自下而上的次序进行</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2016/05/24/sqlbasics/" data-toggle="tooltip" data-placement="top" title="SQL基础练习">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/04/28/aircrack-ng-usage/" data-toggle="tooltip" data-placement="top" title="OSX下利用AirCrack-ng破解WEP加密方式">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#随笔" title="随笔" rel="5">随笔</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#工具使用" title="工具使用" rel="3">工具使用</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="undefined" target="_blank">Liu&#39;s Blog</a></li>
+                    
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.com/" target="_blank">Chriskuei&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "llldar";
+    var disqus_identifier = "https://blog.nathaniel-lin.me/2016/05/13/ConcurrentControl/";
+    var disqus_url = "https://blog.nathaniel-lin.me/2016/05/13/ConcurrentControl/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/machinary">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Nathaniel&#39;s Blog 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+<!-- JQuery UI -->
+<script src="/js/jquery-ui.min.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("https://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="https://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://blog.nathaniel-lin.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-77127637-1';
+    var _gaDomain = 'blog.nathaniel-lin.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+    generateCatalog(".catalog-body");
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("https://blog.nathaniel-lin.me/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "easeOutExpo",
+            filter: "",
+            scrollSpeed: 800,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

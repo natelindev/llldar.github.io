@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nathaniel的博客">
+    <meta name="keyword"  content="博客 极客 程序员 技术">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          程序员为什么要学好英语 - Nathaniel的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://blog.nathaniel-lin.me/2016/10/19/WhyLearningEnglish/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Nathaniel&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-WLE.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#随笔" title="随笔">随笔</a>
+                        
+                          <a class="tag" href="/tags/#英语" title="英语">英语</a>
+                        
+                          <a class="tag" href="/tags/#工具使用" title="工具使用">工具使用</a>
+                        
+
+                    </div>
+                    <h1>程序员为什么要学好英语</h1>
+                    <h2 class="subheading">英语的重要性</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2016-10-19
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="程序员为什么要学好英语"><a href="#程序员为什么要学好英语" class="headerlink" title="程序员为什么要学好英语"></a>程序员为什么要学好英语</h2><blockquote>
+<p>Some people choose to see the ugliness of this world, while I choose to see the beauty of it.</p>
+</blockquote>
+<p>夜深人静，又到了反思一天的时候了。。</p>
+<p>昨晚，又被蚊子折腾到2点才能睡觉。。早起早睡的习惯的养成看起来还是困难重重。</p>
+<p>最近，凭借着2篇随手写的英语作文，竟进入了外研社写作大赛的复赛，也算是意外之福吧，当然第二篇介绍微信的文章类型是我的强项，不枉我看了这么多年的美国小哥的软硬件测评视频、文章。</p>
+<p>思索来思索去，问题又回到了英语上，作为一个程序员，究竟为什么要把英语放在和C++、Java这样的主力语言的同样的地位呢？</p>
+<h3 id="Google-StackOverflow"><a href="#Google-StackOverflow" class="headerlink" title="Google+StackOverflow"></a>Google+StackOverflow</h3><p>Instagram有一个笑话，一个看起来像程序员的青年人，看起来很迷惑，在诘问自己：”Am I good at programming or am I good at Googling and StackOverflowing…”. </p>
+<p>其实，我也有这样的疑问，但是，不可否认的一点是，这两个工具给我的写程序的过程带来了极大的便利，基本上，所有常见的问题都可以通过这两者的组合得以解决。<code>//不要试图通过这两者解决你自己应用的复杂的业务逻辑问题，那基本上是徒劳</code></p>
+<p>所以，部分程序员越来越依赖于以上两者，以至于写下了下面的<code>Exception Handler</code>:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">try</span>&#123;</div><div class="line">	<span class="comment">//something</span></div><div class="line">&#125;<span class="keyword">catch</span>(Exception e)&#123;</div><div class="line">	window.location.href = </div><div class="line">	<span class="string">"https://www.stackoverflow.com/search?q=[js]+"</span></div><div class="line">	+ e.message;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可见二者组合的强大，但是要想正常使用以上二者，一个重要的前提条件就是——<strong>得看得懂英语</strong></p>
+<p>显然，这是一个必要条件，如果连一点英语都不懂，那么去了这两个站也没有什么实际帮助，而如果对英语一知半解的话，显然很可能因为几个词的干扰而导致错误的理解，虽然最终应该能解决问题，但是耗费的时间上看来，不如同样的中文渠道好。</p>
+<h5 id="Google"><a href="#Google" class="headerlink" title="Google"></a>Google</h5><p>Google 的英文搜索的好处在<strong>精准</strong>，只要你能用英文把问题描述的够精准，那么除非这个问题够冷门，你肯定能从这里找到答案。这里对于没有用过Google的人来说可能不好体会，不过想想 像“如何用Javascript实现背景图片在页面加载完后3秒内变暗” 这样具体的问题都能精确定位，应该也能体会个差不多了。</p>
+<h5 id="StackExchange"><a href="#StackExchange" class="headerlink" title="StackExchange"></a>StackExchange</h5><p>StackExchange的好处在于 <strong>全面且专业</strong> ，全面在于，他涵盖了你所能用到的几乎所有 编程/类编程 语言/工具 从C++ 到 LaTex 从 Android 到 macOS，StackExchange都有旗下的子站点来针对每个特定的问题，而且全站支持MathJax数学控件，极大的方便了程序员的交流，当然StackOverflow算是一个大杂烩了，它也是StackExchange旗下的一个子站点，但是相对比较混杂，什么类别的问题都可以在这里提问，提问后通常在一天内即可得到专业的回答。</p>
+<p>说到专业，StackExchange上的人，个个专业，远不像百度知道，知乎这样的业余网站上的人的随意的回答，每一个回答都源自深刻的思考，StackExchange从制度上杜绝了放水的人的存在，也正是这种种制度，才保证了StackExchange社区的专业和严谨的对待问题的态度，这样的态度，是值得我们所有人学习的。</p>
+<h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><p>很多问题，官方往往给出了最好的解答，而社区中的回答，往往解决方案不如官方优雅，然而很大一部分的库与工具软件都是由外国人开发的，这个时候，要阅读官方文档，英语能力必不可少。唯有拥有强大的英语阅读能力，你才能在理解作者对某个功能的用法说明的同时，理解作者设计这一功能的初衷，从而防止了对库的误用。</p>
+<h3 id="代码注释"><a href="#代码注释" class="headerlink" title="代码注释"></a>代码注释</h3><p>开源时代，阅读源代码，已然成为各路程序员的一个基本习惯，然而这个年头，美国依然在计算机领域领先，所以，在阅读外国的开源项目的代码时，注释通常都是英文，要理解作者此处代码的用意，势必要认识英文。</p>
+<h3 id="Paper阅读"><a href="#Paper阅读" class="headerlink" title="Paper阅读"></a>Paper阅读</h3><p>有时候，我们在解决一些计算机科学前沿的问题的时候，避免不了阅读外国的Paper，为了在科研领域了解最新的进展，英语技能一样必不可少。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>一名长者曾经说过，“直接的语言交流，哪怕只是很基本的直接交流，也比间接交流要强很多”，固然你可能有很好的翻译，但在翻译过程中，由于语言自身的表述方式及概念不同，必然会有有信息的流失，同时会混入译者的观点。“学乎其上，得乎其中”，因此，唯有阅读原版书籍，才能和原作者的心灵进行原始的交流。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2016/11/03/ThePowerOfFocus/" data-toggle="tooltip" data-placement="top" title="专注的重要性">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/09/17/TSQL-test/" data-toggle="tooltip" data-placement="top" title="Transact-SQL数据库系统开发实验">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#随笔" title="随笔" rel="5">随笔</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#工具使用" title="工具使用" rel="3">工具使用</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="undefined" target="_blank">Liu&#39;s Blog</a></li>
+                    
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.com/" target="_blank">Chriskuei&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "llldar";
+    var disqus_identifier = "https://blog.nathaniel-lin.me/2016/10/19/WhyLearningEnglish/";
+    var disqus_url = "https://blog.nathaniel-lin.me/2016/10/19/WhyLearningEnglish/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/machinary">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Nathaniel&#39;s Blog 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+<!-- JQuery UI -->
+<script src="/js/jquery-ui.min.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("https://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="https://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://blog.nathaniel-lin.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-77127637-1';
+    var _gaDomain = 'blog.nathaniel-lin.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
