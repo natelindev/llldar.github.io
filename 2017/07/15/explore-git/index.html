@@ -104,13 +104,6 @@
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
                             <a href="/tags/">Tags</a>
                         </li>
                         
@@ -210,7 +203,7 @@
 <h4 id="Copy别人的代码"><a href="#Copy别人的代码" class="headerlink" title="Copy别人的代码"></a>Copy别人的代码</h4><p>刚刚从Github上看到一份特别有趣的代码（好像挺符合我的大作业要求的，哦不对，好像说漏嘴了），怎么弄到手呢？当然是抄过来了，哎？程序猿的事情怎么能说抄呢，这叫借鉴一下。这时候只需要使用一下的命令即可：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">git <span class="built_in">clone</span> 目标仓库位置</div></pre></td></tr></table></figure>
 <p>注意，这里的<code>目标仓库位置</code>可以使本地的一个git文件夹位置，也可以是远程的一个网络地址，比如<code>username@host:/path/to/repository</code>这样的。执行完这条指令之后，在当前工作目录下就会产生一份目标代码仓库的拷贝。</p>
-<h4 id="添加自己的代码"><a href="#添加自己的代码" class="headerlink" title="添加自己的代码"></a>添加自己的代码</h4><p>程序员退休了，拿起毛笔，兴致勃勃地写下一行工整的毛笔字<code>Hello World</code>。那么问题来了，他想把这刚写的这个<code>hello_world.c</code>添加入自己的git文件暂存区(index)，他应76该怎么做呢？当然又是一条新的指令了:</p>
+<h4 id="添加自己的代码"><a href="#添加自己的代码" class="headerlink" title="添加自己的代码"></a>添加自己的代码</h4><p>程序员退休了，拿起毛笔，兴致勃勃地写下一行工整的毛笔字<code>Hello World</code>。那么问题来了，他想把这刚写的这个<code>hello_world.c</code>添加入自己的git文件暂存区(index)，他应该怎么做呢？当然又是一条新的指令了:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">git add 目标文件名</div></pre></td></tr></table></figure>
 <p>说道这里，有人可能要问<code>暂存区(Index)</code>到底是什么。这里需要讲一下git的工作流程(workflow)，简单来说，git的本地仓库下有“三棵树”，第一个是<code>工作目录(Working Directory)</code>里面存放着你的实际代码文件，第二个就是<code>暂存区(Index)</code>了，它相当于一个缓冲区，里面存储着工作目录文件的变动信息，第三个是<code>头指针(Head)</code>，它指向着你最后一次的提交(commit)。</p>
 
