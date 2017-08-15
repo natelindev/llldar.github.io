@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -167,6 +167,8 @@
                         
                           <a class="tag" href="/tags/#Unix" title="Unix">Unix</a>
                         
+                          <a class="tag" href="/tags/#APUE" title="APUE">APUE</a>
+                        
 
                     </div>
                     <h1>APUE读书笔记-1</h1>
@@ -202,12 +204,12 @@
 </li>
 <li><p>1.2  In the output from the program in Figure 1.6, what happened to the processes with processIDs 852 and 853?</p>
 <p>Fig1.6如下图</p>
-<p><img src="apue-1/q2.jpg" alt="q2"></p>
+<p><img src="q2.jpg" alt="q2"></p>
 <p>可见该程序测试了<code>getpid()</code>函数的功能，即获取新的不重复的<code>pid(线程ID)</code>，在这里，我们可以发现获取了<code>pid 851</code>之后，获取到的是<code>pid 854</code>，那么根据多进程的理解，此时最合适的解释是其他的程序在两次执行获取<code>pid</code>的<code>./a.out</code>程序之间，</p>
 </li>
 <li><p>1.3  In Section 1.7, the argument to perror is defined with the ISO C attribute const, whereas the integer argument to strerror isn’t defined with this attribute. Why?</p>
 <p>两个函数定义如下图</p>
-<p><img src="apue-1/q3.jpg" alt="q3"></p>
+<p><img src="q3.jpg" alt="q3"></p>
 <p>原以为这里有什么高深的地方，大概查了下，发现其实就是基础的<code>const</code>问题，所以这里来说，由于函数的传参机制是默认按值传递的，所以<code>strerror</code>函数传递的<code>errorno</code>值是原来<code>errorno</code>值的一份拷贝，因此不必进行<code>const</code>定义也可以保证外部的<code>errorno</code>不会被修改，而<code>perror</code>函数则传递的是指针参数，指针本身并不会被修改，但是指针所指向的区域，在没有前置<code>const</code>的修饰的情况下，是可能被函数修改的，因此在这里使用<code>const</code>来保证输入的字符串不被修改。</p>
 </li>
 <li><p>1.4  If the calendar time is stored as a signed 32-bit integer, in which year will it overflow? Howcan we extend the overflow point? Are these strategies compatible with existing applications?</p>
@@ -314,6 +316,8 @@
                             
                         
                             
+                        
+                            
                             <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
                             
                         
@@ -351,6 +355,8 @@
                         <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
                     
                         <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
                     
                 </ul>
                 
@@ -577,6 +583,25 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
 <!-- Baidu Tongji -->
 
 
@@ -586,7 +611,7 @@
 
 <!-- Image to hack wechat -->
 <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 

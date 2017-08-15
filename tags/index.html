@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -174,15 +174,15 @@
                 
                     <a href="#笔记" title="笔记" rel="1">笔记</a>
                 
+                    <a href="#PHP" title="PHP" rel="1">PHP</a>
+                
+                    <a href="#WEB" title="WEB" rel="1">WEB</a>
+                
                     <a href="#Transact-SQL" title="Transact-SQL" rel="1">Transact-SQL</a>
                 
                     <a href="#C#" title="C#" rel="1">C#</a>
                 
                     <a href="#SQL Server" title="SQL Server" rel="1">SQL Server</a>
-                
-                    <a href="#PHP" title="PHP" rel="1">PHP</a>
-                
-                    <a href="#WEB" title="WEB" rel="1">WEB</a>
                 
                     <a href="#随笔" title="随笔" rel="5">随笔</a>
                 
@@ -198,6 +198,10 @@
                 
                     <a href="#密码学" title="密码学" rel="1">密码学</a>
                 
+                    <a href="#Unix" title="Unix" rel="1">Unix</a>
+                
+                    <a href="#APUE" title="APUE" rel="1">APUE</a>
+                
                     <a href="#星际争霸" title="星际争霸" rel="1">星际争霸</a>
                 
                     <a href="#AI" title="AI" rel="1">AI</a>
@@ -205,8 +209,6 @@
                     <a href="#人工智能" title="人工智能" rel="1">人工智能</a>
                 
                     <a href="#环境搭建" title="环境搭建" rel="1">环境搭建</a>
-                
-                    <a href="#Unix" title="Unix" rel="1">Unix</a>
                 
                     <a href="#git" title="git" rel="1">git</a>
                 
@@ -324,6 +326,58 @@
             </div>
             
             <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="PHP">
+                    <span class="tag-text">PHP</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2016/07/10/PHPLearning/">
+                        <h2 class="post-title">
+                            世界上最好的语言——PHP 学习笔记
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                "PHP是世界上最好的语言"
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="WEB">
+                    <span class="tag-text">WEB</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2016/07/10/PHPLearning/">
+                        <h2 class="post-title">
+                            世界上最好的语言——PHP 学习笔记
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                "PHP是世界上最好的语言"
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="Transact-SQL">
                     <span class="tag-text">Transact-SQL</span>
                 </span>
@@ -392,58 +446,6 @@
                         
                             <h3 class="post-subtitle">
                                 SQL Server的一个练习
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="PHP">
-                    <span class="tag-text">PHP</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/10/PHPLearning/">
-                        <h2 class="post-title">
-                            世界上最好的语言——PHP 学习笔记
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                "PHP是世界上最好的语言"
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="WEB">
-                    <span class="tag-text">WEB</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/10/PHPLearning/">
-                        <h2 class="post-title">
-                            世界上最好的语言——PHP 学习笔记
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                "PHP是世界上最好的语言"
                             </h3>
                         
                     </a>
@@ -750,6 +752,58 @@
             </div>
             
             <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="Unix">
+                    <span class="tag-text">Unix</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2017/08/12/apue-1/">
+                        <h2 class="post-title">
+                            APUE读书笔记-1
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                Unix系统基础
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="APUE">
+                    <span class="tag-text">APUE</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2017/08/12/apue-1/">
+                        <h2 class="post-title">
+                            APUE读书笔记-1
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                Unix系统基础
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="星际争霸">
                     <span class="tag-text">星际争霸</span>
                 </span>
@@ -844,32 +898,6 @@
                         
                             <h3 class="post-subtitle">
                                 BWAPI的使用
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="Unix">
-                    <span class="tag-text">Unix</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2017/08/12/apue-1/">
-                        <h2 class="post-title">
-                            APUE读书笔记-1
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                Unix系统基础
                             </h3>
                         
                     </a>
@@ -1325,6 +1353,7 @@
 
 
 
+
 <!-- Baidu Tongji -->
 
 
@@ -1334,7 +1363,7 @@
 
 <!-- Image to hack wechat -->
 <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 

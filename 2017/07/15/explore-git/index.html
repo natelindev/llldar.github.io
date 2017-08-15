@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -206,6 +206,7 @@
 <h4 id="添加自己的代码"><a href="#添加自己的代码" class="headerlink" title="添加自己的代码"></a>添加自己的代码</h4><p>程序员退休了，拿起毛笔，兴致勃勃地写下一行工整的毛笔字<code>Hello World</code>。那么问题来了，他想把这刚写的这个<code>hello_world.c</code>添加入自己的git文件暂存区(index)，他应该怎么做呢？当然又是一条新的指令了:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">git add 目标文件名</div></pre></td></tr></table></figure>
 <p>说道这里，有人可能要问<code>暂存区(Index)</code>到底是什么。这里需要讲一下git的工作流程(workflow)，简单来说，git的本地仓库下有“三棵树”，第一个是<code>工作目录(Working Directory)</code>里面存放着你的实际代码文件，第二个就是<code>暂存区(Index)</code>了，它相当于一个缓冲区，里面存储着工作目录文件的变动信息，第三个是<code>头指针(Head)</code>，它指向着你最后一次的提交(commit)。</p>
+<p>PS:最近比较忙，本文不定期更新，暂时未完成。</p>
 
 
                 <hr>
@@ -319,6 +320,8 @@
                             
                         
                             
+                        
+                            
                             <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
                             
                         
@@ -356,6 +359,8 @@
                         <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
                     
                         <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
                     
                 </ul>
                 
@@ -582,6 +587,7 @@
 
 
 
+
 <!-- Baidu Tongji -->
 
 
@@ -632,7 +638,7 @@
 
 <!-- Image to hack wechat -->
 <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 
