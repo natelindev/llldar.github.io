@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -203,8 +203,103 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="keyword">typedef</span>	<span class="keyword">unsigned</span> <span class="keyword">char</span>		u_char;</div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">unsigned</span> <span class="keyword">short</span>		u_short;</div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">unsigned</span> <span class="keyword">int</span>		u_int;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _U_LONG</span></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">unsigned</span> <span class="keyword">long</span>		u_long;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> _U_LONG</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">unsigned</span> <span class="keyword">short</span>		ushort;		<span class="comment">/* Sys V compatibility */</span></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">unsigned</span> <span class="keyword">int</span>		uint;		<span class="comment">/* Sys V compatibility */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">u_int64_t</span>		<span class="keyword">u_quad_t</span>;	<span class="comment">/* quads */</span></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">int64_t</span>			<span class="keyword">quad_t</span>;</div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">quad_t</span> *		<span class="keyword">qaddr_t</span>;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">char</span> *			<span class="keyword">caddr_t</span>;	<span class="comment">/* core address */</span></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">int32_t</span>			<span class="keyword">daddr_t</span>;	<span class="comment">/* disk address */</span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">u_int32_t</span>		<span class="keyword">fixpt_t</span>;	<span class="comment">/* fixed point number */</span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">int32_t</span>			<span class="keyword">segsz_t</span>;	<span class="comment">/* segment size */</span></div><div class="line"><span class="keyword">typedef</span>	<span class="keyword">int32_t</span>			<span class="keyword">swblk_t</span>;	<span class="comment">/* swap offset */</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">__int32_t</span>		fd_mask;</div></pre></td></tr></table></figure>
 <p>这里仅仅列出了一些基本数据类型的实现，在<code>sys/_types</code>文件夹下的头文件中还有许多的其他的常见类型，如<code>size_t</code>、<code>time_t</code>等的实现，再此由于篇幅有限就不予详述了，总体而言，Unix下的不少以<code>_t</code>结尾的类型，都是随各个系统的实现方式而可能发生变化的，具体的实现只要观察<code>&lt;sys/types.h&gt;</code>即可得知。这个信息可以帮助我们解决一些潜在的bug。</p>
 <p>简单的介绍一些常见的unix定义的变量类型：</p>
-<p>| <strong>名称</strong>       | <strong>表示数据</strong>                               |<br>| ———— | ————————————– |<br>| clock_t      | CPU时钟周期                                |<br>| comp_t       | 压缩后的CPU时钟周期(不属于POSIX标准)                |<br>| dev_t        | 设备编号                                   |<br>| fd_set       | 文件描述符集合                                |<br>| fpos_t       | 文件位置                                   |<br>| gid_t        | 用户组ID                                  |<br>| ino_t        | inode值(inode为一种文件系统对象，用于区分文件和文件夹等文件类型) |<br>| mode_t       | 文件类型、文件权限                              |<br>| nlink_t      | 该目录的链接数                                |<br>| off_t        | 文件大小和偏移量                               |<br>| pid_t        | 进程ID和进程组ID                             |<br>| pthread_t    | 线程ID                                   |<br>| ptrdiff_t    | 两个指针相减的结果                              |<br>| rlim_t       | 资源上限                                   |<br>| sig_atomic_t | 可用作信号量的原子数据类型                          |<br>| sigset_t     | 信号量集合                                  |<br>| size_t       | 对象的大小(非负)                              |<br>| ssize_t      | 对象的大小或-1                               |<br>| time_t       | 日历时间单位                                 |<br>| uid_t        | 用户ID                                   |<br>| wchar_t      | 宽字符                                    |</p>
 </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>表示数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clock_t</td>
+<td>CPU时钟周期</td>
+</tr>
+<tr>
+<td>comp_t</td>
+<td>压缩后的CPU时钟周期(不属于POSIX标准)</td>
+</tr>
+<tr>
+<td>dev_t</td>
+<td>设备编号</td>
+</tr>
+<tr>
+<td>fd_set</td>
+<td>文件描述符集合</td>
+</tr>
+<tr>
+<td>fpos_t</td>
+<td>文件位置</td>
+</tr>
+<tr>
+<td>gid_t</td>
+<td>用户组ID</td>
+</tr>
+<tr>
+<td>ino_t</td>
+<td>inode值(inode为一种文件系统对象，用于区分文件和文件夹等文件类型)</td>
+</tr>
+<tr>
+<td>mode_t</td>
+<td>文件类型、文件权限</td>
+</tr>
+<tr>
+<td>nlink_t</td>
+<td>该目录的链接数</td>
+</tr>
+<tr>
+<td>off_t</td>
+<td>文件大小和偏移量</td>
+</tr>
+<tr>
+<td>pid_t</td>
+<td>进程ID和进程组ID</td>
+</tr>
+<tr>
+<td>pthread_t</td>
+<td>线程ID</td>
+</tr>
+<tr>
+<td>ptrdiff_t</td>
+<td>两个指针相减的结果</td>
+</tr>
+<tr>
+<td>rlim_t</td>
+<td>资源上限</td>
+</tr>
+<tr>
+<td>sig_atomic_t</td>
+<td>可用作信号量的原子数据类型</td>
+</tr>
+<tr>
+<td>sigset_t</td>
+<td>信号量集合</td>
+</tr>
+<tr>
+<td>size_t</td>
+<td>对象的大小(非负)</td>
+</tr>
+<tr>
+<td>ssize_t</td>
+<td>对象的大小或-1</td>
+</tr>
+<tr>
+<td>time_t</td>
+<td>日历时间单位</td>
+</tr>
+<tr>
+<td>uid_t</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>wchar_t</td>
+<td>宽字符</td>
+</tr>
+</tbody>
+</table>
+<ol>
 <li><p>2.3  Update the program in Figure 2.17 to avoid the needless processing that occurs when sysconf returns LONG_MAX as the limit for OPEN_MAX.</p>
 <p>Fig 2.17内容如下:</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>  OPEN_MAX</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">long</span> openmax = OPEN_MAX;</div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line"><span class="keyword">static</span> <span class="keyword">long</span> openmax = <span class="number">0</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * If OPEN_MAX is indeterminate, this might be inadequate.</div><div class="line"> */</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> OPEN_MAX_GUESS  256</span></div><div class="line"><span class="function"><span class="keyword">long</span></span></div><div class="line"><span class="title">open_max</span><span class="params">(<span class="keyword">void</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (openmax == <span class="number">0</span>) &#123;</div><div class="line">        errno = <span class="number">0</span>;</div><div class="line">        <span class="comment">/* first time through */</span></div><div class="line">        <span class="keyword">if</span> ((openmax = sysconf(_SC_OPEN_MAX)) &lt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (errno == <span class="number">0</span>)</div><div class="line">                openmax = OPEN_MAX_GUESS;   <span class="comment">/* it’s indeterminate */</span></div><div class="line">            <span class="keyword">else</span></div><div class="line">                <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"sysconf error for _SC_OPEN_MAX"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span>(openmax);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -261,11 +356,11 @@
                     <div class="tags">
                         
                             
-                        
-                            
-                        
-                            
                             <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
                             
                         
                             
@@ -289,17 +384,17 @@
                             
                         
                             
+                        
+                            
+                        
+                            
+                        
+                            
                             <a href="/tags/#Unix" title="Unix" rel="2">Unix</a>
                             
                         
                             
                             <a href="/tags/#APUE" title="APUE" rel="2">APUE</a>
-                            
-                        
-                            
-                        
-                            
-                        
                             
                         
                             
