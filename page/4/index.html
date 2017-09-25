@@ -97,14 +97,14 @@
 
                         
                         <li>
-                            <a href="/achives/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/achives/">Archives</a>
                         </li>
                         
                     
@@ -188,6 +188,46 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/2016/05/13/ConcurrentControl/">
+        <h2 class="post-title">
+            数据库的并发控制
+        </h2>
+        
+            <h3 class="post-subtitle">
+                仅做笔记
+            </h3>
+        
+        <div class="post-content-preview">
+            并发控制并发控制的主要技术
+封锁(Locking)
+时间戳(Timestamp)
+乐观控制法
+
+锁的类型
+排他锁    X锁  写锁
+共享锁S锁读锁
+
+
+
+并发事务运行存在的异常问题​    并发操作带来的数据不一致性
+丢失更新​    两个事务同时读写一个数据
+​    事务2的写影响(覆盖)了事务1的写
+​    导致事务1的结果失效
+不可重复读​    三类不可重复读
+
+T1读两次数据......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Nathaniel on
+        2016-05-13
+    </p>
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -326,6 +366,8 @@ Yeah,it’s on
                         
                             
                             <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
                             
                         
                             

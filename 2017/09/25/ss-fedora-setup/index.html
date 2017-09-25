@@ -13,11 +13,11 @@
 
     <title>
         
-          Nathaniel的博客
+          Fedora 26 配置 Shadowsocks - Nathaniel的博客
         
     </title>
 
-    <link rel="canonical" href="http://blog.nathaniel-lin.me/page/3/">
+    <link rel="canonical" href="http://blog.nathaniel-lin.me/2017/09/25/ss-fedora-setup/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -154,233 +154,108 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-ss-fedora-setup.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Nathaniel&#39;s Blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">爱生活，更爱代码</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Shadowsocks" title="Shadowsocks">Shadowsocks</a>
+                        
+
+                    </div>
+                    <h1>Fedora 26 配置 Shadowsocks</h1>
+                    <h2 class="subheading">以及常见问题的解决</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2017-09-25
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="Fedora-26-配置-Shadowsocks"><a href="#Fedora-26-配置-Shadowsocks" class="headerlink" title="Fedora 26 配置 Shadowsocks"></a>Fedora 26 配置 Shadowsocks</h2><p>最近VPS打算从centos迁移到Fedora，这么一来就需要重新搭建Shadowsocks了，这里记录一下搭建的过程。</p>
+<p>首先自然是安装﻿Shadowsocks了，由于Shadowsocks是用<code>Python</code>写的，自然就用下面的安装方式了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line">pip install shadowsocks</div></pre></td></tr></table></figure>
+<p>然后创建shadowsocks的配置文件（路径可根据自己喜好放置）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line">vi /etc/shadowsocks.json</div></pre></td></tr></table></figure>
+<p>配置文件内容如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"server"</span>:<span class="string">"0.0.0.0"</span>,</div><div class="line">	<span class="attr">"server_port"</span>: <span class="number">8888</span>,</div><div class="line">	<span class="attr">"local_port"</span>: <span class="number">1080</span>,</div><div class="line">	<span class="attr">"password"</span>:<span class="string">"yourpassword"</span>,</div><div class="line">	<span class="attr">"timeout"</span>:<span class="number">600</span>,</div><div class="line">	<span class="attr">"method"</span>:<span class="string">"aes-256-cfb"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面解释一下配置文件内容以及其意义：</p>
+<p><code>Server</code>项是你的server监听地址，<code>0.0.0.0</code>是ipv4的默认地址，<code>::0</code>为ipv6默认地址，同时监听ipv4和ipv6的话，根据<code>shadowsocks-libv</code>的一条issue，应该填写<code>&quot;server&quot;:[&quot;[::0]&quot;, &quot;0.0.0.0&quot;]</code>，我测试不能实现该功能，不过值得一试。</p>
+<p><code>server_port</code>是服务端监听的端口号，输入<code>netstat -ntlp | grep LISTEN</code>可以看到你现在监听的所有端口。</p>
+<p><code>local_port</code>是你的本地使用的端口，不要与其他程序冲突。</p>
+<p><code>Timeout</code>是超时时间，建议设置较长的时间。</p>
+<p><code>Method</code>是加密方式，服务端与客户端一致即可。</p>
+<p>下面是基础的 开启、关闭、重启的操作方法:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ssserver -c /etc/shadowsocks.json -d start</div><div class="line">ssserver -d stop</div><div class="line">ssserver -c /etc/shadowsocks.json -d restart</div></pre></td></tr></table></figure>
+<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><p>启动时可能会出现如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">undefined symbol: EVP_CIPHER_CTX_cleanup</div></pre></td></tr></table></figure>
+<p>简单分析一下，是这个符号找不到了，仔细分析一下这个问题，发现是在<code>openssl 1.1.0</code>版本中，废弃了<code>EVP_CIPHER_CTX_cleanup</code>函数，使用<code>EVP_CIPHER_CTX_reset</code>函数替代了<code>EVP_CIPHER_CTX_cleanup</code>函数。因此，解决方案就明了了，使用<code>reset</code>代替<code>cleanup</code>即可。</p>
+<p>即，打开最后层的报错的<code>.py</code>文件，使用vim的命令<code>%s/cleanup/reset/g</code>即可完成替换。</p>
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><p><a href="http://blog.csdn.net/ppdouble/article/details/53066745" target="_blank" rel="external">http://blog.csdn.net/ppdouble/article/details/53066745</a></p>
+<p><a href="https://kionf.com/2016/12/15/errornote-ss/" target="_blank" rel="external">https://kionf.com/2016/12/15/errornote-ss/</a></p>
 
 
-<div class="post-preview">
+                <hr>
 
-    <a href="/2016/11/03/ThePowerOfFocus/">
-        <h2 class="post-title">
-            专注的重要性
-        </h2>
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/08/18/apue-3/" data-toggle="tooltip" data-placement="top" title="APUE读书笔记-3">Next Post &rarr;<br>
+                            <span>APUE读书笔记-3</span></a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- 来必力 评论框 start -->
+                <div class="comment">
+                    <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTc4OC82MzU0"></div>
+                </div>
+                <!-- 来必力 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
         
-            <h3 class="post-subtitle">
-                三心二意的人必定一事无成
-            </h3>
-        
-        <div class="post-content-preview">
-            
-Focus, then the Light is on.
 
-仔细思考思考，你多久没有专注过了？
-电脑💻，手机📱，Youtube，知乎，这些东西，哪个不是注意力的大敌？
-仔细想想，上次你上课专心45分钟是什么时候？
-上次你自习全程4-5小时一直在做高效的工作是什么时候？
-高质的产出，只能源自高效
-总是迷恋于一些工具、常识、语言层面的东西，忘记了“真正的编程能力”，在将来，百害而无一利。
-......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-11-03
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/10/19/WhyLearningEnglish/">
-        <h2 class="post-title">
-            程序员为什么要学好英语
-        </h2>
-        
-            <h3 class="post-subtitle">
-                英语的重要性
-            </h3>
-        
-        <div class="post-content-preview">
-            程序员为什么要学好英语
-Some people choose to see the ugliness of this world, while I choose to see the beauty of it.
-
-夜深人静，又到了反思一天的时候了。。
-昨晚，又被蚊子折腾到2点才能睡觉。。早起早睡的习惯的养成看起来还是困难重重。
-最近，凭借着2篇随手写的英语作文，竟进入了外研社写作大赛的复赛，......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-10-19
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/09/17/TSQL-test/">
-        <h2 class="post-title">
-            Transact-SQL数据库系统开发实验
-        </h2>
-        
-            <h3 class="post-subtitle">
-                SQL Server的一个练习
-            </h3>
-        
-        <div class="post-content-preview">
-            Transact-SQL数据库系统开发实验实验基础信息开发环境:
-
-
-
-操作系统
-Microsoft Windows 7
-
-
-
-
-数据库管理系统
-Microsoft SQL Server 2012
-
-
-编程工具
-Microsoft VisualStudio 2013
-
-
-编程语言
-C#
-
-
-
-界面演示部分全局变量：
-List&lt;string&gt; SQLToBeDone;			//存储......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-09-17
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/10/PHPLearning/">
-        <h2 class="post-title">
-            世界上最好的语言——PHP 学习笔记
-        </h2>
-        
-            <h3 class="post-subtitle">
-                "PHP是世界上最好的语言"
-            </h3>
-        
-        <div class="post-content-preview">
-            世界上最好的语言——PHP 学习笔记环境搭建鉴于我使用的是OSX系统，那么只需要把/etc/apache2/httpd.conf下的LoadModule php5_module libexec/apache2/libphp5.so这一行取消注释，即可使用PHP了
-可以在自己的\Library\Webserver\Documents\下放一个这样的PHP页面检测是否成功,
-&lt;?php	/......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-07-10
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/05/24/sqlbasics/">
-        <h2 class="post-title">
-            SQL基础练习
-        </h2>
-        
-            <h3 class="post-subtitle">
-                基于MySQL的常用语句的练习
-            </h3>
-        
-        <div class="post-content-preview">
-            实验环境硬件环境
-处理器: i5-5257U 2.7-2.9GHz
-内存: 8 GB 1867MHz DDR3
-硬盘: APPLE SSD SM0 256G
-
-软件环境
-操作系统: OSX 10.11.4        
-DBMS版本: MySQL 5.7.12 Community Server (GPL)
-DBMS图形界面: MySQL Workbench 6.3
-
-实验内容基本表基本表的......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-05-24
-    </p>
-
-</div>
-<hr>
-
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-        <li class="previous">
-            <a href="/page/2/">&larr; Newer Posts</a>
-        </li>
-    
-    
-        <li class="next">
-            <a href="/page/4/">Older Posts &rarr;</a>
-        </li>
-    
-</ul>
-
-
-            </div>
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
@@ -466,72 +341,6 @@ DBMS图形界面: MySQL Workbench 6.3
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/avatar.jpg" />
-                        
-
-                        
-                            <p>I love Github~</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.instagram.com/llldar">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                              
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.zhihu.com/people/machinary">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/llldar">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -539,22 +348,77 @@ DBMS图形界面: MySQL Workbench 6.3
                 <ul class="list-inline">
 
                     
-                        <li><a href="http://satjd.net">Satjd&#39;s Blog</a></li>
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
                     
-                        <li><a href="https://liu1084455812.github.io">Liu&#39;s Blog</a></li>
+                        <li><a href="https://liu1084455812.github.io" target="_blank">Liu&#39;s Blog</a></li>
                     
-                        <li><a href="http://huangxuan.me">Hux Blog</a></li>
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
                     
-                        <li><a href="https://chybeta.github.io">Chybeta&#39;s Blog</a></li>
+                        <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
                     
-                        <li><a href="http://blog.chriskuei.cn">Chris Kuei&#39;s Blog</a></li>
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
                     
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+
+
+<script type="text/javascript">
+    (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
