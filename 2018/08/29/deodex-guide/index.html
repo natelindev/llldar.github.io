@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nathaniel的博客">
+    <meta name="keyword"  content="博客 极客 程序员 技术">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+
+    <title>
+        
+          Android 8.0 deodex教程 - Nathaniel的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://blog.nathaniel-lin.me/2018/08/29/deodex-guide/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Nathaniel&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/Portfolio/">Portfolio</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/achives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-deodex-guide.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Android" title="Android">Android</a>
+                        
+                          <a class="tag" href="/tags/#odex" title="odex">odex</a>
+                        
+                          <a class="tag" href="/tags/#移动开发" title="移动开发">移动开发</a>
+                        
+
+                    </div>
+                    <h1>Android 8.0 deodex教程</h1>
+                    <h2 class="subheading">以及反编译等</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2018-08-29
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="Android-8-0-deodex方法"><a href="#Android-8-0-deodex方法" class="headerlink" title="Android 8.0 deodex方法"></a>Android 8.0 deodex方法</h2><p>本文目标在于为广大Android开发者，ROM制作爱好者，喜欢瞎折腾的刷机爱好者提供一份简明而全面的deodex方法。注意，由于机器版本、硬件设施以及软件版本等变化万千，本人不对以下方法执行后造成的任何手机问题负责。</p>
+<h3 id="什么是deodex？"><a href="#什么是deodex？" class="headerlink" title="什么是deodex？"></a>什么是deodex？</h3><p>如果你连deodex是什么都不清楚的话，那么下面我推荐你仅以知识获取的心理状态来阅读本文余下的部分，而不要实际去尝试。</p>
+<h5 id="Android5-0以前"><a href="#Android5-0以前" class="headerlink" title="Android5.0以前"></a>Android5.0以前</h5><p>这个时候的Android虚拟机为Dalvik，这是一个专门为Android移动平台设计的虚拟机。目标系统是RAM有限，数据存储在缓慢的内部闪存上，每一个Dalvik应用作为独立的Linux进程执行，依靠一个Just-In-Time(JIT)编译器去解释字节码。这个时候的Android应用中仅有dex文件，dex对应于Dalvik，正如jar对应于jvm。它就是数据结构特殊的可在Dalvik上执行的文件。</p>
+<h5 id="Android5-0以后"><a href="#Android5-0以后" class="headerlink" title="Android5.0以后"></a>Android5.0以后</h5><p>在Android5.0时，Android虚拟机正式更换为了ART，ART的特殊之处，就是在于它在应用安装的时候就预编译字节码到机器语言，这样可以加快每次应用开启以及运行的速度，为此Andoird也引入了odex和oat文件。oat文件比较直接，直接包含了可在ART下运行的机器码，odex则是优化过的dex，它根据目标机器进行预编译，ART环境下odex中直接为机器码，Dalvik则为字节码，在运行时生成机器码速度更快。</p>
+<p>这样的优化过后，apk中是不含dex文件的，这样如果提取了apk后，因为缺少对应的dex文件，该应用无法在其他的机器上运行，因此我们便需要将其反编译，即deodex，来获取dex文件，然后并入apk文件中，这样我们就能得到完整的可运行的apk文件了。</p>
+<h3 id="为什么要deodex"><a href="#为什么要deodex" class="headerlink" title="为什么要deodex"></a>为什么要deodex</h3><p>我个人的原因是要使用Xposed框架，必须在deodex化的环境下才能使用。</p>
+<p>当然你想要提取系统应用而想要其在其他机器上也能够运行，那么就需要deodex。</p>
+<p>或者是你的<code>/system/</code>分区极小，需要deodex以节省空间。</p>
+<h3 id="deodex工具"><a href="#deodex工具" class="headerlink" title="deodex工具"></a>deodex工具</h3><p>古人云：“工欲善其事，必先利其器”。我们要进行deodex，首先得准备要deodex的工具，互联网上提供的大部分user-friendly的GUI工具基本都不支持Android8.0，因而要对Android8.0进行deodex操作，需要使用<a href="https://github.com/JesusFreke/smali" target="_blank" rel="external"><em>smali</em>/baksmali</a>， 以及<a href="https://github.com/anestisb/vdexExtractor" target="_blank" rel="external">vdex处理工具</a>。但是并非人人都是Android开发者，unix指令操作对于不少用户来说还是颇具难度的。因此，在此我分享一个由战斗民族兄弟开发的<a href="http://bursoft-portable.blogspot.com/p/blog-page_23.html" target="_blank" rel="external">Batch ApkTool</a>，说明均是俄语，自行Google翻译后基本上能知道deodex的方法。</p>
+<ul>
+<li><p>首先，我们使用adb获取我们要deodex的内容</p>
+</li>
+<li><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">./adb pull /system/app</div><div class="line">./adb pull /system/framework</div><div class="line">./adb pull /system/priv-app</div></pre></td></tr></table></figure>
+</li>
+<li><p>一般来说需要deodex的就是这些内容，可根据需要自行改动。</p>
+</li>
+<li><p>将所有的<code>pull</code>出的文件放入<code>Batch ApkTool</code>目录下的<code>_system</code>文件夹中。</p>
+</li>
+<li><p>根据工具提示，更改API level为你对应的API level（8.0 对应 26)</p>
+</li>
+<li><p>使用<code>01</code>指令开始deodex</p>
+</li>
+<li><p>完成后的<code>_system</code>文件夹中内容即为deodex后的内容。</p>
+</li>
+</ul>
+<h3 id="MIUI用户专属步骤"><a href="#MIUI用户专属步骤" class="headerlink" title="MIUI用户专属步骤"></a>MIUI用户专属步骤</h3><p>这个不能算特权了，得多进行几步：</p>
+<ol>
+<li>首先将deodex后的<code>services.jar</code>放入<code>INPUT_JAR</code>文件夹中，进行Decomplie.</li>
+<li>打开 services 文件夹 在文件夹搜索SecurityManagerService.smali，使用文本编辑器打开。</li>
+<li>使用 Ctrl+F 搜索<code>.method private checkSystemSelfProtection(Z)V</code>.</li>
+<li>删除后面 .line *<strong> 和.line*</strong> 之间的代码后保存关闭。</li>
+<li>最后进行Recomplie，从<code>OUTPUT_JAR</code>中获取修改后的<code>services.jar</code>.</li>
+</ol>
+<h4 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h4><h5 id="某某App在Deodex时出现Warning"><a href="#某某App在Deodex时出现Warning" class="headerlink" title="某某App在Deodex时出现Warning"></a>某某App在Deodex时出现Warning</h5><p>A: 请无视它，不影响odex后的结果</p>
+<h5 id="某某App在Deodex时出现Error"><a href="#某某App在Deodex时出现Error" class="headerlink" title="某某App在Deodex时出现Error"></a>某某App在Deodex时出现Error</h5><p>A: 可能是缺少某些文件，考虑将整个<code>/system/</code>拖入<code>_system</code>文件夹后再进行deodex。</p>
+<h5 id="Batch-ApkTool选了中文看不懂"><a href="#Batch-ApkTool选了中文看不懂" class="headerlink" title="Batch ApkTool选了中文看不懂"></a>Batch ApkTool选了中文看不懂</h5><p>A: 该战斗民族少年目测使用了Google机翻，请重新选择英文。</p>
+<h5 id="可我还想修改deodex之后的apk"><a href="#可我还想修改deodex之后的apk" class="headerlink" title="可我还想修改deodex之后的apk"></a>可我还想修改deodex之后的apk</h5><p>A: 请使用该工具提供的<code>Decomple/Recompile</code>功能，以修改中间的<code>smali</code>代码。</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/02/10/pubg-opt/" data-toggle="tooltip" data-placement="top" title="运用吃鸡模式来解决最优化问题">Next Post &rarr;<br>
+                            <span>运用吃鸡模式来解决最优化问题</span></a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- 来必力 评论框 start -->
+                <div class="comment">
+                    <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTc4OC82MzU0"></div>
+                </div>
+                <!-- 来必力 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#随笔" title="随笔" rel="5">随笔</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#工具使用" title="工具使用" rel="3">工具使用</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Unix" title="Unix" rel="3">Unix</a>
+                            
+                        
+                            
+                            <a href="/tags/#APUE" title="APUE" rel="3">APUE</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Fedora" title="Fedora" rel="2">Fedora</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
+                    
+                        <li><a href="https://liu1084455812.github.io" target="_blank">Liu&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<script type="text/javascript">
+    (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                	<li>
+                        <a target="_blank" href="https://www.instagram.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                   
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/machinary">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Nathaniel&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+<!-- JQuery UI -->
+<script src="/js/jquery-ui.min.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("https://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="https://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://blog.nathaniel-lin.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-77127637-1';
+    var _gaDomain = 'blog.nathaniel-lin.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+    generateCatalog(".catalog-body");
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("http://blog.nathaniel-lin.me/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "easeOutExpo",
+            filter: "",
+            scrollSpeed: 800,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/favicon.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+
+</html>

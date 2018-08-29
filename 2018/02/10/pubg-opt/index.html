@@ -13,11 +13,11 @@
 
     <title>
         
-          Nathaniel的博客
+          运用吃鸡模式来解决最优化问题 - Nathaniel的博客
         
     </title>
 
-    <link rel="canonical" href="http://blog.nathaniel-lin.me/page/4/">
+    <link rel="canonical" href="http://blog.nathaniel-lin.me/2018/02/10/pubg-opt/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -154,177 +154,104 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url(' post-bg-pubg-opt.png')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Nathaniel&#39;s Blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">爱生活，更爱代码</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#最优化问题" title="最优化问题">最优化问题</a>
+                        
+
+                    </div>
+                    <h1>运用吃鸡模式来解决最优化问题</h1>
+                    <h2 class="subheading">新式最优化问题解法</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2018-02-10
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
-
-<div class="post-preview">
-
-    <a href="/2016/05/13/ConcurrentControl/">
-        <h2 class="post-title">
-            数据库的并发控制
-        </h2>
-        
-            <h3 class="post-subtitle">
-                仅做笔记
-            </h3>
-        
-        <div class="post-content-preview">
-            并发控制并发控制的主要技术
-封锁(Locking)
-时间戳(Timestamp)
-乐观控制法
-
-锁的类型
-排他锁    X锁  写锁
-共享锁S锁读锁
-
-
-
-并发事务运行存在的异常问题​    并发操作带来的数据不一致性
-丢失更新​    两个事务同时读写一个数据
-​    事务2的写影响(覆盖)了事务1的写
-​    导致事务1的结果失效
-不可重复读​    三类不可重复读
-
-T1读两次数据......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-05-13
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/04/28/aircrack-ng-usage/">
-        <h2 class="post-title">
-            OSX下利用AirCrack-ng破解WEP加密方式
-        </h2>
-        
-            <h3 class="post-subtitle">
-                "永远不要使用WEP加密方式"
-            </h3>
-        
-        <div class="post-content-preview">
-            
-10分钟，我便可以获取你的WEP加密的密钥
-
-开端​    凡事都有个开端，此事的开端呢，来自于网络互联课上的女同学的委托，美人有难，英雄岂能不相助？抱歉又中二了，废话不多说，先来了解问题：
-问题定位​    问题源自一个奇怪的路由器，此路由器品牌特殊，功能也特殊，复位后还有密码，而且密码居然和配套说明书上的不一致（大多数路由器复位后应该是没有密码的），于是这路由器就用不了了，好在机智的我......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-04-28
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/04/27/Whywriteablog/">
-        <h2 class="post-title">
-            为什么要开始写博客?
-        </h2>
-        
-            <h3 class="post-subtitle">
-                 "建Blog历程" 
-            </h3>
-        
-        <div class="post-content-preview">
-            
-Yeah,it’s on
-
-开端​    一直想要一个自己搭建的Blog，今天下午，说干就干，花了2-3小时的时间，成功的把博客搭了起来，也算是了却了我长久以来的一个心愿。
-​    我一直想要的是自己搭建的博客，而不是去Cnblogs,博客园等地方凑合凑合。
-​    一方面，那些博客站广告和限制一样多，过时的Web设计，天朝特色的气息铺面而来（不好的那种），而自己搭建的Blog，没有广......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2016-04-27
-    </p>
-
-</div>
-<hr>
-
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-        <li class="previous">
-            <a href="/page/3/">&larr; Newer Posts</a>
-        </li>
-    
-    
+                <h2 id="运用吃鸡模式来解决最优化问题"><a href="#运用吃鸡模式来解决最优化问题" class="headerlink" title="运用吃鸡模式来解决最优化问题"></a>运用吃鸡模式来解决最优化问题</h2><p>绝地求生—大逃杀，俗称吃鸡，是17年最火的游戏没有之一，很显然我也领略了这一游戏的风采，不得不说，这个游戏模式很有新意，虽然这个游戏模式并非其原创，但在细节与整体综合体验上（除了海量的BUG），算是做的最好的了。但是，等等，这个模式怎么感觉有点熟悉？竞争、生存区域缩小、淘汰、最终获得一个胜利者。。这不就是典型的最优化问题的解决方案吗？</p>
+<p>那么也别闲着，这就来测试测试这个模式到底能不能用于解决经典的最优化问题。首先我们来看看经典最优化问题有哪些：</p>
+<ul>
+<li><p>(施工中…)</p>
+</li>
 </ul>
 
 
-            </div>
+                <hr>
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/08/29/deodex-guide/" data-toggle="tooltip" data-placement="top" title="Android 8.0 deodex教程">&larr; Previous Post<br>
+                            <span>Android 8.0 deodex教程</span></a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/10/15/changesh/" data-toggle="tooltip" data-placement="top" title="更换你的Shell">Next Post &rarr;<br>
+                            <span>更换你的Shell</span></a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- 来必力 评论框 start -->
+                <div class="comment">
+                    <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTc4OC82MzU0"></div>
+                </div>
+                <!-- 来必力 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
                     <!-- no hr -->
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        
-                            
-                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
                         
                             
                         
@@ -365,6 +292,24 @@ Yeah,it’s on
                             
                         
                             
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Fedora" title="Fedora" rel="2">Fedora</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
                             <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
                             
                         
@@ -381,6 +326,14 @@ Yeah,it’s on
                             
                         
                             
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
                         
                             
                         
@@ -392,72 +345,6 @@ Yeah,it’s on
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/avatar.jpg" />
-                        
-
-                        
-                            <p>I love Github~</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.instagram.com/llldar">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                              
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.zhihu.com/people/machinary">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/llldar">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -465,22 +352,77 @@ Yeah,it’s on
                 <ul class="list-inline">
 
                     
-                        <li><a href="http://satjd.net">Satjd&#39;s Blog</a></li>
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
                     
-                        <li><a href="https://liu1084455812.github.io">Liu&#39;s Blog</a></li>
+                        <li><a href="https://liu1084455812.github.io" target="_blank">Liu&#39;s Blog</a></li>
                     
-                        <li><a href="http://huangxuan.me">Hux Blog</a></li>
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
                     
-                        <li><a href="https://chybeta.github.io">Chybeta&#39;s Blog</a></li>
+                        <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
                     
-                        <li><a href="http://blog.chriskuei.cn">Chris Kuei&#39;s Blog</a></li>
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
                     
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+
+
+<script type="text/javascript">
+    (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
@@ -539,7 +481,7 @@ Yeah,it’s on
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Nathaniel&#39;s Blog 2017 
+                    Copyright &copy; Nathaniel&#39;s Blog 2018 
                     <br>
                     Theme by <a href="http://huangxuan.me">Hux</a> 
                     <span style="display: inline-block; margin: 0 5px;">
