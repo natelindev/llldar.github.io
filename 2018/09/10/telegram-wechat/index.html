@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nathaniel的博客">
+    <meta name="keyword"  content="博客 极客 程序员 技术">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+
+    <title>
+        
+          使用Telegram收发微信消息 - Nathaniel的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://blog.nathaniel-lin.me/2018/09/10/telegram-wechat/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Nathaniel&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/Portfolio/">Portfolio</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/achives/">Archives</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://blog.nathaniel-lin.me/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-telegram-wechat.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#-微信 -Telegram -工具使用" title="-微信 -Telegram -工具使用">-微信 -Telegram -工具使用</a>
+                        
+
+                    </div>
+                    <h1>使用Telegram收发微信消息</h1>
+                    <h2 class="subheading">基于EH Forwarder Bot 2.0</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2018-09-10
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="使用Telegram收发微信消息"><a href="#使用Telegram收发微信消息" class="headerlink" title="使用Telegram收发微信消息"></a>使用Telegram收发微信消息</h2><h4 id="Why-Telegram"><a href="#Why-Telegram" class="headerlink" title="Why Telegram?"></a>Why Telegram?</h4><p>封闭而落后的微信已经逐渐无法跟上时代的发展脚步，中立而现代的Telegram在Whatsapp被Facebook收购后，逐渐成为了广大Geek的首选，它不仅功能强大，支持10万人群组，支持各种机器人，消息全平台同步，而且也完全免费且开源。由于其GPL License以及开放API，第三方Telegram客户端在市场上百花齐放。其安全性尚有争议，在这里本文提示，尽量不要使用任何不开源的第三方Telegram客户端。</p>
+<h4 id="Why-This-bot"><a href="#Why-This-bot" class="headerlink" title="Why This bot?"></a>Why This bot?</h4><p>当然，使用Telegram可以体验到先进的IM软件的一切优点，但由于种种原因，Telegram并无法在中国大陆直接使用，这就导致了说服同学、家人、朋友使用该软件可谓是难上加难，不管Telegram多么好，他们依旧要继续使用落后的微信，而我们使用IM通常是还是要和这些同学、朋友联系的，不然IM就失去了它的意义。这时候，一个解决方案出现了，由<a href="https://github.com/blueset" target="_blank" rel="external">blueset</a>开源的<a href="https://github.com/blueset/ehForwarderBot" target="_blank" rel="external">ehForwarderBot</a>提供了一种几乎完美的解决方案，那就是利用Telegram收发微信消息。</p>
+<h4 id="Why-this-guide"><a href="#Why-this-guide" class="headerlink" title="Why this guide?"></a>Why this guide?</h4><p>现有的网络上的Telegram微信互联教程基本都是基于ehForwarderBot1.x的，而同样的方法在2.x时代已经不再适用，而官方文档是全英文的，因此我在此处提供一个概要的指南来提供最新解决方案的搭建问题。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>这里就不详细介绍了，想仔细了解请参阅<a href="https://ehforwarderbot.readthedocs.io/en/latest/" target="_blank" rel="external">官方文档</a>。简单的来说就是 EhforwarderBot是一个中间平台，master端为Telegram对应的模块，可以收发微信消息，同时进行一些简单的操作，利用Telegram的Bot机制实现。slave端则为模拟微信Web端的操作，通过微信Web端的代码分析实现消息的收发。注意，正如原文中所提示，你使用该Bot时可能会更换IP地址，因而<strong>可能会导致你的微信Web端登陆被封禁一段时间，对微信Web端有依赖的请谨慎使用本Bot</strong>（手机端不受影响）。</p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>首先你需要有一台墙外的VPS，（理论上你可以将这个Python程序装入Docker容器中然后部署至Heroku免费的deyno上，这里由于时间限制暂时先不讨论该方案），因为该VPS需要能直接访问Telegram和微信的服务器。</p>
+<p>服务器端你需要有python3.6或以上版本，客户端需要能够连接至服务端。</p>
+<h4 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h4><h5 id="安装python3-6以及pip3"><a href="#安装python3-6以及pip3" class="headerlink" title="安装python3.6以及pip3"></a>安装python3.6以及pip3</h5><p>python3.6安装方式：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tgz</div><div class="line">tar xvf Python-3.6.3.tgz</div><div class="line">cd Python-3.6.3</div><div class="line">./configure --enable-optimizations</div><div class="line">make -j8</div><div class="line">sudo make altinstall</div><div class="line">python3.6</div></pre></td></tr></table></figure>
+<p>可能要用到的依赖：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y make build-essential libssl-dev zlib1g-dev   </div><div class="line">sudo apt-get install -y libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm </div><div class="line">sudo apt-get install -y libncurses5-dev  libncursesw5-dev xz-utils tk-dev</div><div class="line">sudo apt-get install build-essential libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev</div></pre></td></tr></table></figure>
+<p>如果安装的python3.6没有自带pip，则：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py</div><div class="line">python3.6 get-pip.py</div></pre></td></tr></table></figure>
+<p>在安装完python3之后，输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"> pip3 install ehforwarderbot</div></pre></td></tr></table></figure>
+<p>这样<code>Ehforwarderbot</code>的核心部分就安装好了，接下来该安装Telegram主端和wechat从端了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">pip3 install efb-telegram-master</div><div class="line">pip3 install efb-wechat-slave</div></pre></td></tr></table></figure>
+<h5 id="创建所需要的目录"><a href="#创建所需要的目录" class="headerlink" title="创建所需要的目录"></a>创建所需要的目录</h5><p>在这里我们先创建总的 <code>Ehforwarderbot</code>的目录 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cd ~</div><div class="line">mkdir .ehforwarderbot</div><div class="line">cd .ehforwarderbot</div><div class="line">mkdir profiles</div><div class="line">cd profiles</div><div class="line">mkdir default</div><div class="line">cd default </div><div class="line">touch config.yaml</div></pre></td></tr></table></figure>
+<p>其中<code>config.yaml</code>添加如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">master_channel: blueset.telegram</div><div class="line">slave_channels:</div><div class="line">- blueset.wechat</div></pre></td></tr></table></figure>
+<p>接下来进行主端的目录配置(以下操作在<code>~/.ehforwarderbot/profiles/default/</code>目录下进行)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mkdir blueset.telegram</div><div class="line">cd blueset.telegram</div><div class="line">touch config.yaml</div></pre></td></tr></table></figure>
+<p>其中<code>config.yaml</code>添加如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">token: &quot;你自己创建的bot的token，可以从botfather处获得&quot;</div><div class="line"></div><div class="line">admins:</div><div class="line">- 你的telegram id，可以从jsondumpbot那里获得</div></pre></td></tr></table></figure>
+<p>接下来进行从端的目录配置(以下操作在<code>~/.ehforwarderbot/profiles/default/</code>目录下进行)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mkdir blueset.wechat</div><div class="line">cd blueset.wechat</div><div class="line">touch config.yaml</div></pre></td></tr></table></figure>
+<p>其中<code>config.yaml</code>添加如下内容：</p>
+<p>由于本人使用的是iterm2因此添加以下内容用于显示登陆二维码，其他用户可不必添加任何内容。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">flags:</div><div class="line">    imgcat_qr: true</div></pre></td></tr></table></figure>
+<p>配置完成后：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ehforwarderbot</div></pre></td></tr></table></figure>
+<p>扫描二维码登陆即可使用Telegram收发微信消息了。</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/08/29/deodex-guide/" data-toggle="tooltip" data-placement="top" title="Android 8.0 deodex教程">Next Post &rarr;<br>
+                            <span>Android 8.0 deodex教程</span></a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- 来必力 评论框 start -->
+                <div class="comment">
+                    <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTc4OC82MzU0"></div>
+                </div>
+                <!-- 来必力 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#随笔" title="随笔" rel="5">随笔</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#工具使用" title="工具使用" rel="3">工具使用</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Unix" title="Unix" rel="3">Unix</a>
+                            
+                        
+                            
+                            <a href="/tags/#APUE" title="APUE" rel="3">APUE</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Fedora" title="Fedora" rel="2">Fedora</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
+                    
+                        <li><a href="https://liu1084455812.github.io" target="_blank">Liu&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<script type="text/javascript">
+    (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                	<li>
+                        <a target="_blank" href="https://www.instagram.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                   
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/machinary">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Nathaniel.Lin.53">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Nathaniel&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+<!-- JQuery UI -->
+<script src="/js/jquery-ui.min.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("https://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="https://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://blog.nathaniel-lin.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-77127637-1';
+    var _gaDomain = 'blog.nathaniel-lin.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/favicon.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+
+</html>
