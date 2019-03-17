@@ -90,13 +90,6 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
                             <a href="/Portfolio/">Portfolio</a>
                         </li>
                         
@@ -104,7 +97,7 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -112,6 +105,13 @@
                         
                         <li>
                             <a href="/achives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -188,6 +188,33 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/2019/03/17/systemd-usage/">
+        <h2 class="post-title">
+            创建Systemd服务方法
+        </h2>
+        
+        <div class="post-content-preview">
+            创建Systemd服务方法创建一个文件 xxx.service，内容如下[Unit]Description=服务描述[Service]ExecStart=可执行文件地址[Install]WantedBy=multi-user.target
+
+扔进 /etc/systemd/system `
+
+权限不足的话记得改权限
+chmod u+x 服务对应的可执行文件
+
+启动服务
+sudo system......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Nathaniel on
+        2019-03-17
+    </p>
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -341,31 +368,6 @@ pip install shadowsocks
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2017/08/18/apue-3/">
-        <h2 class="post-title">
-            APUE读书笔记-3
-        </h2>
-        
-            <h3 class="post-subtitle">
-                Unix系统基础
-            </h3>
-        
-        <div class="post-content-preview">
-            APUE读书笔记-3第三章本章主要讲了文件的I/O操作
-Unix下主要有五个系统API接口用于操控文件，分别是open、 read 、write 、lseek、 close，顾名思义，分别是用于打开、读取、写入、内部定位、关闭文件。
-文件描述符File Descriptors通常为一个非负整数，可以用于表示任何类型的文件(文件夹也是一种特殊的文件)，操作系统的文件操作API通常以文件描述符作......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Nathaniel on
-        2017-08-18
-    </p>
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -435,6 +437,8 @@ Unix下主要有五个系统API接口用于操控文件，分别是open、 read 
                             
                         
                             
+                            <a href="/tags/#linux" title="linux" rel="2">linux</a>
+                            
                         
                             
                         
@@ -454,6 +458,8 @@ Unix下主要有五个系统API接口用于操控文件，分别是open、 read 
                         
                             
                             <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
                             
                         
                             
