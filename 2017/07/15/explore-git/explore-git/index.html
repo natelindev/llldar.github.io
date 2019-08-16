@@ -13,11 +13,11 @@
 
     <title>
         
-          使用Telegram收发qq消息 - Nathaniel的博客
+          探索Git - Nathaniel的博客
         
     </title>
 
-    <link rel="canonical" href="https://llldar.github.io/2018/09/22/telegram-qq/">
+    <link rel="canonical" href="https://llldar.github.io/2017/07/15/explore-git/explore-git/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -162,7 +162,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('post-bg-telegram-qq.jpg')
+        background-image: url('post-bg-explore-git.png')
     }
 </style>
 <header class="intro-header" >
@@ -172,19 +172,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#qq" title="qq">qq</a>
-                        
-                          <a class="tag" href="/tags/#Telegram" title="Telegram">Telegram</a>
-                        
                           <a class="tag" href="/tags/#工具使用" title="工具使用">工具使用</a>
+                        
+                          <a class="tag" href="/tags/#git" title="git">git</a>
                         
 
                     </div>
-                    <h1>使用Telegram收发qq消息</h1>
-                    <h2 class="subheading">基于EH Forwarder Bot 2.0</h2>
+                    <h1>探索Git</h1>
+                    <h2 class="subheading">git全部功能研究</h2>
                     <span class="meta">
                         Posted by Nathaniel on
-                        2018-09-22
+                        2017-07-15
                     </span>
                 </div>
             </div>
@@ -203,12 +201,19 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="使用Telegram收发qq消息"><a href="#使用Telegram收发qq消息" class="headerlink" title="使用Telegram收发qq消息"></a>使用Telegram收发qq消息</h3><p>跟上一篇内容类似，这里不多废话了。</p>
-<p>首先安装docker</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure>
-<p>然后安装CoolQ客户端</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker pull richardchien/cqhttp:latest</div></pre></td></tr></table></figure>
-<p>(施工中…)</p>
+                <h2 id="探索Git"><a href="#探索Git" class="headerlink" title="探索Git"></a>探索Git</h2><p>用了这么多年的github，如今才发现，我对git的实际功能知之甚少，因此，今日就来研究研究git的用法，记录于此，方便我自己日后查阅，同时也方便其他打算了解git的朋友们。</p>
+<h3 id="Git是什么"><a href="#Git是什么" class="headerlink" title="Git是什么"></a>Git是什么</h3><p>Git是现今最常用的版本控制工具，“版本控制工具是什么?…”，什么？好吧，更新软件这件事大家应该都做过吧？软件大都有一个版本号，这个版本号就代表了软件的演进历程。每个版本的软件的代码都有不同，显然由人工来管理的话工作量会过大且容易出错，软件的体量越大时这一点越明显。说道这里自然要讲讲git起源了，<a href="https://en.wikipedia.org/wiki/Linus_Torvalds" target="_blank" rel="external">Linus Torvalds</a>大神在开发Linux的时候，考虑着这Linux和其他人一起开发，各自版本都不一样怎么工作，现有的版本控制工具都不能满足需求，那就自己写一个好了，于是Linus就随手写了一个。。随手写了一个，对，这就是神级开发者与我这样的搬砖码农的差距（捂脸）</p>
+<h3 id="基础git功能"><a href="#基础git功能" class="headerlink" title="基础git功能"></a>基础git功能</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>首先当然是要下载安装git了，这种事情自然要从<a href="https://git-scm.com/download/" target="_blank" rel="external">官网</a>进行，主流的三个平台都有支持。这里就不详述了。</p>
+<h4 id="创建新的仓库"><a href="#创建新的仓库" class="headerlink" title="创建新的仓库"></a>创建新的仓库</h4><p>万物从init开始，自然，假设我们要开始一个伟大的项目（虽然很有可能不了了之，但是不影响开始的时候的伟大性对吧），我们创建了一个文件夹，名叫<code>great_project</code>，伟大的项目，自然就要用最先进的技术了，那么如何进行项目的初始化呢？其实只要在<code>great_project</code>下敲下这行神奇代码即可:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">git init</div></pre></td></tr></table></figure>
+<p>执行了这行命令之后，你就可以正式开始在这个文件夹下使用git的各项功能了，也就是说，这个文件夹已经算是一个git代码仓库了。如果观察够仔细的话，你会发现，在这个文件夹下其实多了一个隐藏的<code>.git</code>文件夹，里面存放着git的版本控制用的信息。要在一个文件夹下使用git，必须要执行这一步。</p>
+<h4 id="Copy别人的代码"><a href="#Copy别人的代码" class="headerlink" title="Copy别人的代码"></a>Copy别人的代码</h4><p>刚刚从Github上看到一份特别有趣的代码（好像挺符合我的大作业要求的，哦不对，好像说漏嘴了），怎么弄到手呢？当然是抄过来了，哎？程序猿的事情怎么能说抄呢，这叫借鉴一下。这时候只需要使用一下的命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">git <span class="built_in">clone</span> 目标仓库位置</div></pre></td></tr></table></figure>
+<p>注意，这里的<code>目标仓库位置</code>可以使本地的一个git文件夹位置，也可以是远程的一个网络地址，比如<code>username@host:/path/to/repository</code>这样的。执行完这条指令之后，在当前工作目录下就会产生一份目标代码仓库的拷贝。</p>
+<h4 id="添加自己的代码"><a href="#添加自己的代码" class="headerlink" title="添加自己的代码"></a>添加自己的代码</h4><p>程序员退休了，拿起毛笔，兴致勃勃地写下一行工整的毛笔字<code>Hello World</code>。那么问题来了，他想把这刚写的这个<code>hello_world.c</code>添加入自己的git文件暂存区(index)，他应该怎么做呢？当然又是一条新的指令了:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">git add 目标文件名</div></pre></td></tr></table></figure>
+<p>说道这里，有人可能要问<code>暂存区(Index)</code>到底是什么。这里需要讲一下git的工作流程(workflow)，简单来说，git的本地仓库下有“三棵树”，第一个是<code>工作目录(Working Directory)</code>里面存放着你的实际代码文件，第二个就是<code>暂存区(Index)</code>了，它相当于一个缓冲区，里面存储着工作目录文件的变动信息，第三个是<code>头指针(Head)</code>，它指向着你最后一次的提交(commit)。</p>
+<p>PS:最近比较忙，本文不定期更新，暂时未完成。</p>
 
 
                 <hr>
@@ -216,14 +221,14 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2019/03/17/systemd-usage/" data-toggle="tooltip" data-placement="top" title="创建Systemd服务方法">&larr; Previous Post<br>
-                            <span>创建Systemd服务方法</span></a>
+                            <a href="/2017/08/12/apue-1/apue-1/" data-toggle="tooltip" data-placement="top" title="APUE读书笔记-1">&larr; Previous Post<br>
+                            <span>APUE读书笔记-1</span></a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/2018/09/10/telegram-wechat/" data-toggle="tooltip" data-placement="top" title="使用Telegram收发微信消息">Next Post &rarr;<br>
-                            <span>使用Telegram收发微信消息</span></a>
+                            <a href="/2017/07/12/redhat-interview-review/redhat-interview-review/" data-toggle="tooltip" data-placement="top" title="反思与总结">Next Post &rarr;<br>
+                            <span>反思与总结</span></a>
                         </li>
                     
                 </ul>

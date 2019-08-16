@@ -13,11 +13,11 @@
 
     <title>
         
-          使用Telegram收发qq消息 - Nathaniel的博客
+          OSX下利用AirCrack-ng破解WEP加密方式 - Nathaniel的博客
         
     </title>
 
-    <link rel="canonical" href="https://llldar.github.io/2018/09/22/telegram-qq/">
+    <link rel="canonical" href="https://llldar.github.io/2016/04/28/OSX下利用AirCrack-ng破解WEP加密方式/aircrack-ng-usage/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -162,7 +162,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('post-bg-telegram-qq.jpg')
+        background-image: url('post-bg-aircrack-ng-usage.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -172,19 +172,21 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#qq" title="qq">qq</a>
-                        
-                          <a class="tag" href="/tags/#Telegram" title="Telegram">Telegram</a>
-                        
                           <a class="tag" href="/tags/#工具使用" title="工具使用">工具使用</a>
+                        
+                          <a class="tag" href="/tags/#Aircrack_ng" title="Aircrack_ng">Aircrack_ng</a>
+                        
+                          <a class="tag" href="/tags/#OSX" title="OSX">OSX</a>
+                        
+                          <a class="tag" href="/tags/#密码学" title="密码学">密码学</a>
                         
 
                     </div>
-                    <h1>使用Telegram收发qq消息</h1>
-                    <h2 class="subheading">基于EH Forwarder Bot 2.0</h2>
+                    <h1>OSX下利用AirCrack-ng破解WEP加密方式</h1>
+                    <h2 class="subheading">&quot;永远不要使用WEP加密方式&quot;</h2>
                     <span class="meta">
                         Posted by Nathaniel on
-                        2018-09-22
+                        2016-04-28
                     </span>
                 </div>
             </div>
@@ -203,12 +205,53 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="使用Telegram收发qq消息"><a href="#使用Telegram收发qq消息" class="headerlink" title="使用Telegram收发qq消息"></a>使用Telegram收发qq消息</h3><p>跟上一篇内容类似，这里不多废话了。</p>
-<p>首先安装docker</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure>
-<p>然后安装CoolQ客户端</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker pull richardchien/cqhttp:latest</div></pre></td></tr></table></figure>
-<p>(施工中…)</p>
+                <blockquote>
+<p>10分钟，我便可以获取你的WEP加密的密钥</p>
+</blockquote>
+<h2 id="开端"><a href="#开端" class="headerlink" title="开端"></a>开端</h2><p>​    凡事都有个开端，此事的开端呢，来自于网络互联课上的女同学的委托，美人有难，英雄岂能不相助？抱歉又中二了，废话不多说，先来了解问题：</p>
+<h3 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h3><p>​    问题源自一个奇怪的路由器，此路由器品牌特殊，功能也特殊，复位后还有密码，而且密码居然和配套说明书上的不一致（大多数路由器复位后应该是没有密码的），于是这路由器就用不了了，好在机智的我敏锐地发现了该路由器是用WEP加密方式加密的，于是我心里便有了底，便也才敢接下这个任务，当一回初级黑客（窃喜），其实高中时我就利用Linux下的Beini成功破解出过一次WEP密钥，所以感觉我是十拿九稳了，所以才敢夸海口答应下来。</p>
+<h3 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h3><p>​    一学期的密码学不是白学的，跟完<a href="https://www.coursera.org/learn/crypto" target="_blank" rel="external">Dan Boneh大神的密码学课</a>后，WEP加密方式自然被作为错误实现加密方式的典例来介绍了。</p>
+<h4 id="RC4"><a href="#RC4" class="headerlink" title="RC4"></a>RC4</h4><p>​     RC4是一种基于<strong>流密码</strong>的加密方式，所谓流密码加密，主要是和<strong>分组密码</strong>的加密相对来说，就是说密文是直接由<em>随机置换函数</em>、<em>明文</em>和<em>密钥</em>直接得到的，而分组密码则会把明文分为多个块来加密。</p>
+<p>​    RC4由于没有使用分离的<code>nounce</code>来进行加密，许多RC4的应用仅仅是把<code>nounce</code>和RC4密钥拼在一起当做新的密钥来进行加密，而流密码加密方式的特性导致重复使用同一密钥多次用于加密必然是不安全的，而且不仅仅是相同，只要相似就会很不安全，事实上，很快就有人发现了对RC4的 <a href="https://en.wikipedia.org/wiki/Related_key_attack" target="_blank" rel="external">related key attacks</a>攻击。也就是说RC4本身就是不安全的，现代流密码主要使用 <a href="https://en.wikipedia.org/wiki/ESTREAM" target="_blank" rel="external">eSTREAM</a>。如果你需要使用流密码来加密某些数据的话，记得一定要使用eSTREAM 而不是RC4。</p>
+<h4 id="WEP"><a href="#WEP" class="headerlink" title="WEP"></a>WEP</h4><p>​    RC4本身已经不安全，而基于RC4的WEP加密方式则更进一步，用了一种更不安全的方式来使用RC4实现加密。下面说说WEP加密方式的步骤吧</p>
+<p>​    <img src="WEP.jpg" alt="WEP"></p>
+<p>​    CRC是用来校验明文的标记，接在明文后，和明文一起用RC4，用IV（就是前文说到的<em>nounce</em>）拼上用户的密钥来作为加密密钥。加密完成后把IV和密文一并发出，由于是对称加密，这样知道密钥的用户辅以获得的IV就可以解密消息了。</p>
+<p>​    但是这里问题在与IV只有24位，也就是说，大约每加密$2^{24} \approx 10^6$ 个密文，就会出现重复的密钥，然而多次使用同一密钥是极其不安全的，攻击者可以轻易的获取你的明文。而WEP加密方式登算是峰造极了，由于密钥重复率高，而且多次使用基本相同的密钥，再加之其底层的RC4流密码加密方式也不安全，还有每次重启后IV还被重置为0，导致了WEP加密方式的密钥都能轻易被获取，更不用说加密后的明文了。所以攻击者只需要收集差不多$10^6$个IV不同的密文就可以轻易获得WEP加密的密钥了，但是由于位数很少，攻击者可以采用Brute Force(暴力破解)和收集IV结合的方式，减少IV的收集工作量，所以差不多现在只要收集差不多4万个IV不同的密文就可以获得密钥了。</p>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p>​    说了那么多理论，总得实践实践，虽然说我有Linux虚拟机，Windows虚拟机，Chrome OS虚拟机，但是我还是更喜欢用原生系统来解决这个问题，so我最终还是决定了在OSX下解决这个问题。</p>
+<h4 id="获取Airport命令行工具"><a href="#获取Airport命令行工具" class="headerlink" title="获取Airport命令行工具"></a>获取Airport命令行工具</h4><p>​    Airport是OSX自带的一个Wifi管理工具，不过默认状态下是不能直接用的，需要在Terminal下输入如下指令才能开启使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport</div></pre></td></tr></table></figure>
+<p>(注：由于OSX 10.11引入了 <a href="https://en.wikipedia.org/wiki/System_Integrity_Protection" target="_blank" rel="external">System Integrity Protection</a>机制，应该使用如下命令：源自<a href="http://stackoverflow.com/questions/33223457/mac-osx-el-capitan-airport-sym-link-not-permitted" target="_blank" rel="external">StackOverflow</a>)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/<span class="built_in">local</span>/bin/airport</div></pre></td></tr></table></figure>
+<p>​    好，这样Airport 命令行工具已经可以使用了，接下来就是安装我们的主角 aircrack-ng了</p>
+<h4 id="安装Aircrack-ng"><a href="#安装Aircrack-ng" class="headerlink" title="安装Aircrack-ng"></a>安装Aircrack-ng</h4><p>​    有多种安装方式，如果你已经有了Homebrew那么可以直接用这样的命令就可以安装Aircrack-ng了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ brew install aircrack-ng</div></pre></td></tr></table></figure>
+<p>​    当然一般的方法是你先去搜索－下载－安装了Airport之后，执行一下<code>sudo port -v selfupdate</code>命令后，执行下面的命令进行 Aircrack-ng的安装:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ sudo port install aircrack-ng</div></pre></td></tr></table></figure>
+<h4 id="开始破解"><a href="#开始破解" class="headerlink" title="开始破解"></a>开始破解</h4><p>​    首先,输入指令:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ airport -s</div></pre></td></tr></table></figure>
+<p>获取当前所有的wifi列表：如下图(SSID被我抹掉了)：</p>
+<p><img src="Wifi-list.jpg" alt="Wifi-list"></p>
+<p>记录下目标的 <code>BSSID</code>和 <code>Channel</code>（后面会用到）</p>
+<p>然后变可以开始嗅探数据包了，输入下面命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ sudo airport en0 sniff 11</div></pre></td></tr></table></figure>
+<p><code>en0</code>是我的默认无线网卡的名称，你可以通过<code>ifconfig</code>命令查看你的网卡情况。</p>
+<p>然后可以看到你的wifi应该变成这个样子：</p>
+<p><img src="wifi-status.jpg" alt="wifi-status"></p>
+<p>然后就是等待了，通常等待5-10分钟（视该网络的繁忙度而定）</p>
+<p>按下<code>control+C</code>停止嗅探。</p>
+<p>然后Aircrack-ng会告诉你捕获的包的位置（通常在<code>/tmp/</code>下）</p>
+<p>由于那个包通常名字比较长，建议是把它复制出来到桌面上改名后进行破解：</p>
+<p>在finder中用<code>control+shift+G</code>的快捷键到达目标目录。</p>
+<p>这样最后使用下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ aircrack-ng -1 -a 1 -b ac:a3:1e:fe:f3:80 ~/Desktop/1.cap</div></pre></td></tr></table></figure>
+<p>即可开始破解了(注意把BSSID换成你的BSSID，cap包名换成你的包名)</p>
+<h4 id="失败"><a href="#失败" class="headerlink" title="失败"></a>失败</h4><p>如果你嗅探时间过短的话，通常会得到下面的画面：</p>
+<p><img src="failed.jpg" alt="failed"></p>
+<p>不要灰心，多花些时间把，可以嗅探的同时干点别的事情。</p>
+<h4 id="成功"><a href="#成功" class="headerlink" title="成功"></a>成功</h4><p>时间够长的话，可以得到下面的画面：</p>
+<p><img src="succeed.jpg" alt="succeed"></p>
+<p>终于成功啦！ 密码还刚好是66666，感觉我真是66666.</p>
+<p>可以看到，收集的IV超过4万个时，破解WEP密钥根本不是难事，理论和实践完美的结合在了一起。</p>
 
 
                 <hr>
@@ -216,14 +259,14 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2019/03/17/systemd-usage/" data-toggle="tooltip" data-placement="top" title="创建Systemd服务方法">&larr; Previous Post<br>
-                            <span>创建Systemd服务方法</span></a>
+                            <a href="/2016/05/13/ConcurrentControl/ConcurrentControl/" data-toggle="tooltip" data-placement="top" title="数据库的并发控制">&larr; Previous Post<br>
+                            <span>数据库的并发控制</span></a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/2018/09/10/telegram-wechat/" data-toggle="tooltip" data-placement="top" title="使用Telegram收发微信消息">Next Post &rarr;<br>
-                            <span>使用Telegram收发微信消息</span></a>
+                            <a href="/2016/04/27/为什么要开始写博客/Whywriteablog/" data-toggle="tooltip" data-placement="top" title="为什么要开始写博客?">Next Post &rarr;<br>
+                            <span>为什么要开始写博客?</span></a>
                         </li>
                     
                 </ul>
@@ -241,20 +284,6 @@
             </div>  
  
       <!-- Sidebar Container -->
-        
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
-            </div>
         
 
     <!-- Sidebar Container -->
@@ -612,51 +641,28 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
 
 <!-- Baidu Tongji -->
 
 
-
-<script type="text/javascript">
-    function generateCatalog (selector) {
-        var P = $('div.post-container'),a,n,t,l,i,c;
-        a = P.find('h1,h2,h3,h4,h5,h6');
-        a.each(function () {
-            n = $(this).prop('tagName').toLowerCase();
-            i = "#"+$(this).prop('id');
-            t = $(this).text();
-            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
-            l = $('<li class="'+n+'_nav"></li>').append(c);
-            $(selector).append(l);
-        });
-        return true;    
-    }
-    generateCatalog(".catalog-body");
-    // toggle side catalog
-    $(".catalog-toggle").click((function(e){
-        e.preventDefault();
-        $('.side-catalog').toggleClass("fold")
-    }))
-    /*
-     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
-     * Fork by Hux to support padding
-     */
-    async("https://llldar.github.io/js/jquery.nav.js", function () {
-        $('.catalog-body').onePageNav({
-            currentClass: "active",
-            changeHash: !1,
-            easing: "easeOutExpo",
-            filter: "",
-            scrollSpeed: 800,
-            scrollOffset: 0,
-            scrollThreshold: .2,
-            begin: null,
-            end: null,
-            scrollChange: null,
-            padding: 80
-        });
-    });
-</script>
 
 
 

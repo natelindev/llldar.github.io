@@ -13,11 +13,11 @@
 
     <title>
         
-          使用Telegram收发qq消息 - Nathaniel的博客
+          为什么要开始写博客? - Nathaniel的博客
         
     </title>
 
-    <link rel="canonical" href="https://llldar.github.io/2018/09/22/telegram-qq/">
+    <link rel="canonical" href="https://llldar.github.io/2016/04/27/为什么要开始写博客/Whywriteablog/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -162,7 +162,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('post-bg-telegram-qq.jpg')
+        background-image: url('post-bg-Whywriteablog.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -172,19 +172,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#qq" title="qq">qq</a>
-                        
-                          <a class="tag" href="/tags/#Telegram" title="Telegram">Telegram</a>
-                        
-                          <a class="tag" href="/tags/#工具使用" title="工具使用">工具使用</a>
+                          <a class="tag" href="/tags/#随笔" title="随笔">随笔</a>
                         
 
                     </div>
-                    <h1>使用Telegram收发qq消息</h1>
-                    <h2 class="subheading">基于EH Forwarder Bot 2.0</h2>
+                    <h1>为什么要开始写博客?</h1>
+                    <h2 class="subheading"> &quot;建Blog历程&quot; </h2>
                     <span class="meta">
                         Posted by Nathaniel on
-                        2018-09-22
+                        2016-04-27
                     </span>
                 </div>
             </div>
@@ -203,12 +199,42 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="使用Telegram收发qq消息"><a href="#使用Telegram收发qq消息" class="headerlink" title="使用Telegram收发qq消息"></a>使用Telegram收发qq消息</h3><p>跟上一篇内容类似，这里不多废话了。</p>
-<p>首先安装docker</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure>
-<p>然后安装CoolQ客户端</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker pull richardchien/cqhttp:latest</div></pre></td></tr></table></figure>
-<p>(施工中…)</p>
+                <blockquote>
+<p>Yeah,it’s on</p>
+</blockquote>
+<h4 id="开端"><a href="#开端" class="headerlink" title="开端"></a>开端</h4><p>​    一直想要一个自己搭建的Blog，今天下午，说干就干，花了2-3小时的时间，成功的把博客搭了起来，也算是了却了我长久以来的一个心愿。</p>
+<p>​    我一直想要的是自己搭建的博客，而不是去Cnblogs,博客园等地方凑合凑合。</p>
+<p>​    一方面，那些博客站广告和限制一样多，过时的Web设计，天朝特色的气息铺面而来（不好的那种），而自己搭建的Blog，没有广告，控制权在握，而且只要主题选的好，可以美的窒息。</p>
+<p>​    另一方面，自己搭建的Blog更具有挑战性，文科生看看教程（这里没有贬低文科生的意思）看看教程都能搭起了，对我这样的程序员又难道会是一个难题？</p>
+<h4 id="动手"><a href="#动手" class="headerlink" title="动手"></a>动手</h4><p>​    那么就着手吧，<a href="https://hexo.io/" target="_blank" rel="external">Hexo</a> + <a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a> 经典的组合，很早就名声在外，一直没能测试过。（这里膜拜一下<a href="https://github.com/tommy351" target="_blank" rel="external">Tommy Chen</a> 大神 ，感谢他的代码，让我们能如此方便地搭起Blog来）我先根据一些中文博客上的教程，想部署好这个经典组合，无奈总是出现奇奇怪怪的问题，比如说下面这样的：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">&#123; [Error: Cannot find module <span class="string">'./build/Release/DTraceProviderBindings'</span>] code: <span class="string">'MODULE_NOT_FOUND'</span> &#125;</div><div class="line">&#123; [Error: Cannot find module <span class="string">'./build/default/DTraceProviderBindings'</span>] code: <span class="string">'MODULE_NOT_FOUND'</span> &#125;</div><div class="line">&#123; [Error: Cannot find module <span class="string">'./build/Debug/DTraceProviderBindings'</span>] code: <span class="string">'MODULE_NOT_FOUND'</span> &#125;</div></pre></td></tr></table></figure>
+<p>只是输入<code>hexo -v</code> 的命令就出现这样多的错误，也是吓人。一开始我以为是我的Node.js的问题，毕竟我刚刚试用了最新的6.0版的Node.js 于是Node.js版本回退吧，但是这并没有解决问题。</p>
+<p>那么只好去Google 一下咯，据说输入这条指令可以解决问题：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ npm install hexo --no-optional</div></pre></td></tr></table></figure>
+<p>但是我自己试了并没有效果，但是上面的错误的意思我还是理解的，就是缺少一些模块。据说是因为我朝神奇的网络因素，Hexo还没有安装完毕就停了下来，所以缺少一些模块。那么我就重新安装一次吧，根据Hexo Documentation 的指示，输入下面这条指令就是安装了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ npm install hexo-cli -g</div></pre></td></tr></table></figure>
+<p>当然你得先有Node.js 和 git 作为一名程序员我怎么会没有嘛。当然Mac用户还得有Xcode 的Command Line Tools.</p>
+<p>于是重装一遍就这么就正常了，也省得我再去别的地方下载那些缺少的模块了。</p>
+<p>由于本人还是能看得懂一点英语 + 有一种 <em>“外国的月亮比中国的圆”</em> 的思想，我还是找了<a href="https://gist.github.com/yt8yt/ff97d36f7a35948a8351" target="_blank" rel="external">一篇英文教程</a>看了。</p>
+<p>Timezone 也是个麻烦事，教程里面给的默认Timezone 是Japan 我可不想让时区有偏差（报道上出了偏差是要负责任的）,毕竟差一小时呢，不过改成 China 或 Beijing 都会出错，那么又得去看提供<a href="http://momentjs.com/timezone/" target="_blank" rel="external">时区的源项目站</a>了，不得不感谢这些开源的开发者们，他们的工作便利了我们的生活。</p>
+<p>于是乎把 <code>_conf.yml</code> 里面的 <code>timezone: Japan</code>  改成 <code>timezone Asia/Shanghai</code> 这个问题就解决了。</p>
+<p>接下来就是部署了，安装 hexo-deployer-git 的时候又出现了网络问题，真是坚定了我肉身翻墙的信心啊！最后还是靠着另一开源杰作 Lantern 把这个问题解决了。</p>
+<p>马上就可以部署了！真是兴奋！</p>
+<p>咦？怎么总是部署失败？</p>
+<p>检查来检查去,原来是我Deploy的repo 里面的我的用户名拼错了啊摔！</p>
+<p>于是把 <code>repo: git@github.com:lllar/llldar.github.io.git</code></p>
+<p>改成 <code>repo: git@github.com:llldar/llldar.github.io.git</code></p>
+<p>就真的部署成功了。</p>
+<h4 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h4><p>当然搭完博客不是就全完了，还得写文章啊。。但是我才发现要写文章还得会使Markdown…</p>
+<p>于是又赶去学Markdown😓。当然 <strong>工欲善其事，必先利其器</strong> ，好的Markdown编辑器是成功的一半，这里 <a href="http://typora.io" target="_blank" rel="external">Typora</a> 简直是良心之作，人类进步的阶梯！Mou对代码的支持太差，程序员不作考虑了。。</p>
+<h4 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h4><p>​    写到这里感觉我写跑题了，不过这第一篇文章本来也就是用来练习MarkDown的，而且这也不是高考作文哈。不过还是说说吧，为什么要开始写博客呢？</p>
+<ol>
+<li>人总是会闲下来，与其把闲下来的时间拿去看电影，玩游戏，不如用来创作博文。</li>
+<li>程序员总是要写代码的，写完代码总结一篇，不仅自己能够提高，同时也能解决他人的疑惑，利人利己，何乐而不为？</li>
+<li>日子总是要过的，然而我又不会天天写日记，这里能留下我生活的痕迹吧，也好将来回忆。</li>
+<li>好吧其实以上3条是我瞎编的，其实我写技术博客是因为公司招聘经常说有技术博客的优先。。。</li>
+</ol>
+<p>好吧，时不我待，还要赶着复习C++，就写这么多了，目前站点也是处于蛮荒之地的状态，择日修整修整。</p>
 
 
                 <hr>
@@ -216,15 +242,10 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2019/03/17/systemd-usage/" data-toggle="tooltip" data-placement="top" title="创建Systemd服务方法">&larr; Previous Post<br>
-                            <span>创建Systemd服务方法</span></a>
+                            <a href="/2016/04/28/OSX下利用AirCrack-ng破解WEP加密方式/aircrack-ng-usage/" data-toggle="tooltip" data-placement="top" title="OSX下利用AirCrack-ng破解WEP加密方式">&larr; Previous Post<br>
+                            <span>OSX下利用AirCrack-ng破解WEP加密方式</span></a>
                         </li>
                     
-                    
-                        <li class="next">
-                            <a href="/2018/09/10/telegram-wechat/" data-toggle="tooltip" data-placement="top" title="使用Telegram收发微信消息">Next Post &rarr;<br>
-                            <span>使用Telegram收发微信消息</span></a>
-                        </li>
                     
                 </ul>
 
@@ -241,20 +262,6 @@
             </div>  
  
       <!-- Sidebar Container -->
-        
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
-            </div>
         
 
     <!-- Sidebar Container -->
@@ -616,47 +623,6 @@
 <!-- Baidu Tongji -->
 
 
-
-<script type="text/javascript">
-    function generateCatalog (selector) {
-        var P = $('div.post-container'),a,n,t,l,i,c;
-        a = P.find('h1,h2,h3,h4,h5,h6');
-        a.each(function () {
-            n = $(this).prop('tagName').toLowerCase();
-            i = "#"+$(this).prop('id');
-            t = $(this).text();
-            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
-            l = $('<li class="'+n+'_nav"></li>').append(c);
-            $(selector).append(l);
-        });
-        return true;    
-    }
-    generateCatalog(".catalog-body");
-    // toggle side catalog
-    $(".catalog-toggle").click((function(e){
-        e.preventDefault();
-        $('.side-catalog').toggleClass("fold")
-    }))
-    /*
-     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
-     * Fork by Hux to support padding
-     */
-    async("https://llldar.github.io/js/jquery.nav.js", function () {
-        $('.catalog-body').onePageNav({
-            currentClass: "active",
-            changeHash: !1,
-            easing: "easeOutExpo",
-            filter: "",
-            scrollSpeed: 800,
-            scrollOffset: 0,
-            scrollThreshold: .2,
-            begin: null,
-            end: null,
-            scrollChange: null,
-            padding: 80
-        });
-    });
-</script>
 
 
 

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nathaniel的博客">
+    <meta name="keyword"  content="博客 极客 程序员 技术">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+
+    <title>
+        
+          Transact-SQL数据库系统开发实验 - Nathaniel的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://llldar.github.io/2016/09/17/TSQL-test/TSQL-test/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Nathaniel&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/Portfolio/">Portfolio</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/achives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://llldar.github.io/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('post-bg-TSQL-test.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#数据库" title="数据库">数据库</a>
+                        
+                          <a class="tag" href="/tags/#Transact-SQL" title="Transact-SQL">Transact-SQL</a>
+                        
+                          <a class="tag" href="/tags/#C#" title="C#">C#</a>
+                        
+                          <a class="tag" href="/tags/#SQL Server" title="SQL Server">SQL Server</a>
+                        
+
+                    </div>
+                    <h1>Transact-SQL数据库系统开发实验</h1>
+                    <h2 class="subheading">SQL Server的一个练习</h2>
+                    <span class="meta">
+                        Posted by Nathaniel on
+                        2016-09-17
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="Transact-SQL数据库系统开发实验"><a href="#Transact-SQL数据库系统开发实验" class="headerlink" title="Transact-SQL数据库系统开发实验"></a>Transact-SQL数据库系统开发实验</h2><h4 id="实验基础信息"><a href="#实验基础信息" class="headerlink" title="实验基础信息"></a>实验基础信息</h4><p>开发环境:</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>Microsoft Windows 7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据库管理系统</td>
+<td>Microsoft SQL Server 2012</td>
+</tr>
+<tr>
+<td>编程工具</td>
+<td>Microsoft VisualStudio 2013</td>
+</tr>
+<tr>
+<td>编程语言</td>
+<td>C#</td>
+</tr>
+</tbody>
+</table>
+<h5 id="界面演示"><a href="#界面演示" class="headerlink" title="界面演示"></a>界面演示</h5><p>部分全局变量：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">List&lt;string&gt; SQLToBeDone;			//存储需要执行的SQL语句</div><div class="line">Dictionary&lt;int,string[]&gt; values; 	//存储待INSERT的值</div><div class="line">DataSet orderDetails;				//数据集，存储适配器选择出来的数据</div><div class="line">OleDbDataAdapter ordAdapter;		//OleDb数据适配器</div></pre></td></tr></table></figure>
+<h5 id="查询功能："><a href="#查询功能：" class="headerlink" title="查询功能："></a>查询功能：</h5><p>(见下页)</p>
+<p><img src="select.png" alt=""></p>
+<p>可见，程序开启时默认显示所有订单及第一个订单的详情                                                    </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void Form1_Load(object sender, EventArgs e)</div><div class="line">&#123;</div><div class="line">  	//显示所有订单</div><div class="line">  	this.salesOrderHeaderTableAdapter.Fill(this.adventureDataSet.SalesOrderHeader);</div><div class="line">	orderDetails = new DataSet();</div><div class="line">	//显示第一个订单详情</div><div class="line">	int SaleOrderID = Int32.Parse(this.salesGridView.Rows[0].Cells[0].Value.ToString());</div><div class="line">	String salesDetailQuery = &quot;SELECT * FROM Sales.SalesOrderDetail WHERE SalesOrderID = &quot; + SaleOrderID.ToString();</div><div class="line">	ordAdapter = new OleDbDataAdapter(salesDetailQuery, this.salesOrderDetailTableAdapter.Connection);</div><div class="line">	ordAdapter.Fill(orderDetails);</div><div class="line">	this.salesDetailGridView.DataSource = orderDetails.Tables[0];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>单击某一行，显示对应行的订单详情</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void salesGridView_CellClick(object sender, DataGridViewCellEventArgs e)</div><div class="line">&#123;</div><div class="line">	if (salesGridView.SelectedRows.Count &gt; 0)</div><div class="line">	&#123;</div><div class="line">	int SaleOrderID = Int32.Parse(this.salesGridView.SelectedRows[0].Cells[0].Value.ToString());</div><div class="line">	String salesDetailQuery = &quot;SELECT * FROM Sales.SalesOrderDetail WHERE SalesOrderID = &quot; + SaleOrderID.ToString();</div><div class="line"> 	ordAdapter = new OleDbDataAdapter(salesDetailQuery, this.salesOrderDetailTableAdapter.Connection);</div><div class="line">	orderDetails.Clear();</div><div class="line">	ordAdapter.Fill(orderDetails);</div><div class="line">	this.salesDetailGridView.DataSource = orderDetails.Tables[0];</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="删除功能："><a href="#删除功能：" class="headerlink" title="删除功能："></a>删除功能：</h5><p>选取订单明细中的一行，点击删除，选择的订单明细从表中删除</p>
+<p>(见下页)</p>
+<p><img src="del1.png" alt=""> <img src="del2.png" alt=""></p>
+<p>删除按钮代码如下</p>
+<p>(见下页)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void delete_btn_Click(object sender, EventArgs e)</div><div class="line">&#123;</div><div class="line">	if (salesDetailGridView.SelectedRows.Count &gt; 0)</div><div class="line">	&#123;</div><div class="line">	int SaleOrderDetailID = Int32.Parse(this.salesDetailGridView.SelectedRows[0].Cells[1].Value.ToString());</div><div class="line">	String salesDetailDelete = &quot;DELETE FROM Sales.SalesOrderDetail WHERE SalesOrderDetailID = &quot; + SaleOrderDetailID.ToString();</div><div class="line">	SQLToBeDone.Add(salesDetailDelete);             						orderDetails.Tables[0].Rows[this.salesDetailGridView.SelectedRows[0].Index].Delete();</div><div class="line">	&#125;</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		MessageBox.Show(&quot;请先选中要删除的行&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但并不真正从数据库中删除（因为生成的SQL语句存储在<code>SQLToBeDone</code> 中，此时还未执行）</p>
+<p><img src="del3.png" alt=""></p>
+<h5 id="关闭功能"><a href="#关闭功能" class="headerlink" title="关闭功能:"></a>关闭功能:</h5><p> <img src="exit.png" alt="exit"></p>
+<p>续上述操作，点击关闭按钮或者右上角的X按钮时：</p>
+<p>点击关闭按钮时，如果订单明细有修改但没有保存，则提示是否关闭，如果不关闭则返回，否则关闭程序，如果没有修改，则直接关闭(退出前检查SQLToBeDone 是否有内容，如果有则说明做出了修改)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"> protected override void OnFormClosing(FormClosingEventArgs e)</div><div class="line">&#123;       </div><div class="line">	if (SQLToBeDone.Count &gt; 0 &amp;&amp; CloseCancel() == false)</div><div class="line">	&#123;</div><div class="line">		e.Cancel = true;</div><div class="line">	&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static bool CloseCancel()</div><div class="line">&#123;</div><div class="line">	const string message = &quot;你还有未保存的修改，确认要退出吗？&quot;;</div><div class="line">	const string caption = &quot;退出确认窗口&quot;;</div><div class="line">	var result = MessageBox.Show(message, caption,</div><div class="line">	MessageBoxButtons.YesNo,</div><div class="line">	MessageBoxIcon.Question);</div><div class="line"></div><div class="line">	if (result == DialogResult.Yes)</div><div class="line">		return true;</div><div class="line">	else</div><div class="line">		return false;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void close_btn_Click(object sender, EventArgs e)</div><div class="line">&#123;</div><div class="line">	this.Close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="保存功能："><a href="#保存功能：" class="headerlink" title="保存功能："></a>保存功能：</h5><p>续上述操作，选择<code>否</code> 后， 单击保存按钮</p>
+<p>点击保存按钮时，将订单明细保存到数据库</p>
+<p>(见下页)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void save_btn_Click(object sender, EventArgs e)</div><div class="line">&#123;</div><div class="line">    bool hasError = false;</div><div class="line">    if (SQLToBeDone.Count &gt; 0)</div><div class="line">    &#123;</div><div class="line">        this.salesOrderDetailTableAdapter.Connection.Open();</div><div class="line">        foreach(String sql in SQLToBeDone)</div><div class="line">        &#123;</div><div class="line">            try</div><div class="line">            &#123;</div><div class="line">                OleDbCommand cmd = new OleDbCommand(sql, this.salesOrderDetailTableAdapter.Connection);//创建Command对象  </div><div class="line">                cmd.ExecuteNonQuery();//执行命令                 </div><div class="line">            &#125;</div><div class="line">            catch (Exception ex) </div><div class="line">            &#123;                     </div><div class="line">                hasError = true;</div><div class="line">                MessageBox.Show(ex.Message, &quot;数据库操作错误&quot;, MessageBoxButtons.OK, MessageBoxIcon.Error);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        this.salesOrderDetailTableAdapter.Connection.Close();</div><div class="line">        SQLToBeDone.Clear();</div><div class="line">        if (!hasError)</div><div class="line">        &#123;</div><div class="line">            MessageBox.Show(&quot;保存成功&quot;);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>保存按钮按下之后:     <img src="save1.png" alt=""></p>
+<p>再次查询数据库：<img src="save2.png" alt=""></p>
+<p>发现对应记录已经被删除</p>
+<h5 id="插入功能："><a href="#插入功能：" class="headerlink" title="插入功能："></a>插入功能：</h5><p>可以在订单明细表的最后输入新的订单明细（在输入完一行之后，插入操作才被加入队列中）</p>
+<p><img src="insert1.png" alt=""></p>
+<p>保存后，查询数据库有:</p>
+<p>(见下页)</p>
+<p><img src="insert2.png" alt=""></p>
+<p>更新功能：可以修改订单明细表中的某一行的内容</p>
+<p><img src="update1.png" alt=""></p>
+<p>保存后查询数据库有:</p>
+<p><img src="update2.png" alt=""></p>
+<p>如果输入的单价（UnitPrice）大于产品的公开报价，则提示相应的信息（利用4.6.2的触发器完成此功能）。</p>
+<p><img src="update3.png" alt=""></p>
+<p>对应保存与更新功能的代码部分</p>
+<p>通过<code>Dictionary</code> 及 <code>List</code> 数据结构，判断当前行是否已输入所有需要输入的数据</p>
+<p>根据是否有<code>SalesOrderDetailID</code>来判断是进行插入操作还是更新操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">private void salesGridDetailView_CellValidated(object sender, DataGridViewCellEventArgs e)</div><div class="line">&#123;</div><div class="line">    string cellValue = salesDetailGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();</div><div class="line">    string id = salesDetailGridView.Rows[e.RowIndex].Cells[1].Value.ToString();</div><div class="line">    string columnName = salesDetailGridView.Columns[e.ColumnIndex].Name;</div><div class="line">    if (id.Length &gt; 0)</div><div class="line">    &#123;</div><div class="line">        //UPDATE 模式          </div><div class="line">        String salesDetailUpdate = &quot;UPDATE Sales.SalesOrderDetail SET &quot; + columnName + &quot; = &apos;&quot; + cellValue + &quot;&apos; WHERE SalesOrderDetailID = &quot; + id;</div><div class="line">        SQLToBeDone.Add(salesDetailUpdate);</div><div class="line">    &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        //INSERT 模式</div><div class="line">        if (!values.ContainsKey(e.RowIndex))</div><div class="line">        &#123;</div><div class="line">            string[] lineValue = new string[11];</div><div class="line">            lineValue[e.ColumnIndex] = cellValue;</div><div class="line">            values[e.RowIndex] = lineValue;              </div><div class="line">        &#125;</div><div class="line">        else </div><div class="line">        &#123;             </div><div class="line">            values[e.RowIndex][e.ColumnIndex] = cellValue;</div><div class="line">            int length = 0;</div><div class="line">            for (int i = 0; i &lt; 11; ++i)</div><div class="line">            &#123;</div><div class="line">                length += (values[e.RowIndex][i] == string.Empty || values[e.RowIndex][i] == null ? 0 : 1);</div><div class="line">            &#125;</div><div class="line">                string salesDetailInsert = &quot;INSERT INTO Sales.SalesOrderDetail VALUES(&quot;;</div><div class="line">                if (length == 9)</div><div class="line">                &#123;</div><div class="line">                    for (int i = 0; i &lt; 11; ++i)</div><div class="line">                    &#123;</div><div class="line">                        if (i != 1 &amp;&amp; i != 8)</div><div class="line">                        &#123;</div><div class="line">                            salesDetailInsert += &quot;&apos;&quot;;</div><div class="line">                            salesDetailInsert += values[e.RowIndex][i];</div><div class="line">                            salesDetailInsert += &quot;&apos;&quot;;</div><div class="line">                            if (i != 10)</div><div class="line">                            &#123;</div><div class="line">                                salesDetailInsert += &quot;,&quot;;</div><div class="line">                            &#125;</div><div class="line">                        &#125;                              </div><div class="line">                    &#125;</div><div class="line">                    salesDetailInsert += &quot;)&quot;;</div><div class="line">                    SQLToBeDone.Add(salesDetailInsert);</div><div class="line">                    values.Remove(e.RowIndex);   </div><div class="line">                &#125;                                  </div><div class="line">        &#125;              </div><div class="line">       </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="问题解答"><a href="#问题解答" class="headerlink" title="问题解答"></a>问题解答</h4><ol>
+<li><p>使用哪种数据提供程序？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">本程序使用了 OLEDB 类数据提供程序</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用的数据连接对象是哪一个？连接对象是如何建立的？最后生成的连接对象中的连接字符串是什么？代表什么含义？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">连接对象为this.salesOrderDetailTableAdapter.Connection </div><div class="line">是使用salesOrderDetailTableAdapter 使用SQL语句 连接对应的数据库 建立的</div><div class="line">连接字符串如下:</div><div class="line">Provider=SQLNCLI11;Data Source=Nathaniel-PC;Persist Security Info=True;Password=123123;User ID=test_login;Initial Catalog=AdventureWorks2012</div><div class="line">含义如下</div><div class="line">Provider 为客户端组件的驱动  Data Source 为数据源的名称  </div><div class="line">Password 为连接数据库的密码  User ID 为连接数据库的登录名 </div><div class="line">Initial Catalog为默认使用的数据库  Persist Security Info 表示是否保存用户登录信息</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用的数据适配器对象是什么？其中的查询或更新语句是什么？如果有参数则参数是如何处理的？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">使用的数据适配器对象为ordAdapter</div><div class="line">  </div><div class="line">查询语句为</div><div class="line">&quot;SELECT * FROM Sales.SalesOrderDetail WHERE SalesOrderID = &quot; + SaleOrderID.ToString();</div><div class="line"></div><div class="line">更新语句为</div><div class="line">&quot;UPDATE Sales.SalesOrderDetail SET &quot; + columnName + &quot; = &apos;&quot; + cellValue + &quot;&apos; WHERE SalesOrderDetailID = &quot; + id;</div><div class="line"></div><div class="line">参数使用 ToString()方法 连接入SQL语句中</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用的数据集对象是什么？数据集中有哪些数据表？数据表是由哪些适配器对象生成的？（或采用其它方法）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">使用的数据集对象为orderDetails 内部有SalesOrderDetail表，是由ordAdapter数据适配器对象生成的</div><div class="line">还有一个数据集为AdventureDataSet 内部有SalesOrderHeader表，是由salesOrderHeaderTableAdapter数据适配器对象生成的</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>常见问题</p>
+<ol>
+<li>在实验过程中总是在出现数据库操作异常后程序中止，后来将数据库操作放入<code>try... catch</code>语句块中后，数据库错误得以被显示出来，而且程序得以继续正常运行</li>
+<li>在一开始设计器中自动生成的<code>cell_content_click</code> 方法下，实现点击订单列表栏目自动显示对应详情总是失败，后来更换为<code>cell_click</code>便成功解决了这一问题</li>
+</ol>
+<p>需要改进的地方</p>
+<ol>
+<li>程序可移植性差，部分列采用列序号硬编码方式，更换数据库后该程序可能不能再适用</li>
+<li>程序界面适应性差，在窗口大小变化后，内容并不会随窗口大小变化而自适应</li>
+</ol>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2016/10/19/WhyLearningEnglish/WhyLearningEnglish/" data-toggle="tooltip" data-placement="top" title="程序员为什么要学好英语">&larr; Previous Post<br>
+                            <span>程序员为什么要学好英语</span></a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/07/10/PHPLearning/PHPLearning/" data-toggle="tooltip" data-placement="top" title="世界上最好的语言——PHP 学习笔记">Next Post &rarr;<br>
+                            <span>世界上最好的语言——PHP 学习笔记</span></a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- 来必力 评论框 start -->
+                <div class="comment">
+                    <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTc4OC82MzU0"></div>
+                </div>
+                <!-- 来必力 评论框 end -->
+                
+
+            </div>  
+ 
+      <!-- Sidebar Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#Unix" title="Unix" rel="3">Unix</a>
+                            
+                        
+                            
+                            <a href="/tags/#APUE" title="APUE" rel="3">APUE</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#linux" title="linux" rel="2">linux</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Fedora" title="Fedora" rel="2">Fedora</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Telegram" title="Telegram" rel="2">Telegram</a>
+                            
+                        
+                            
+                            <a href="/tags/#工具使用" title="工具使用" rel="5">工具使用</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#随笔" title="随笔" rel="5">随笔</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#Linux" title="Linux" rel="2">Linux</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#数据库" title="数据库" rel="3">数据库</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://satjd.net" target="_blank">Satjd&#39;s Blog</a></li>
+                    
+                        <li><a href="https://liu1084455812.github.io" target="_blank">Liu&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="https://chybeta.github.io" target="_blank">Chybeta&#39;s Blog</a></li>
+                    
+                        <li><a href="http://blog.chriskuei.cn" target="_blank">Chris Kuei&#39;s Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<script type="text/javascript">
+    (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:https://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://t.me/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-telegram fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                	<li>
+                        <a target="_blank" href="https://www.instagram.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                   
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/machinary">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/llldar">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Nathaniel&#39;s Blog 2019 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+<!-- JQuery UI -->
+<script src="/js/jquery-ui.min.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("https://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="https://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://llldar.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-77127637-1';
+    var _gaDomain = 'blog.nathaniel-lin.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/favicon.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+
+</html>

@@ -13,11 +13,11 @@
 
     <title>
         
-          使用Telegram收发qq消息 - Nathaniel的博客
+          APUE读书笔记-1 - Nathaniel的博客
         
     </title>
 
-    <link rel="canonical" href="https://llldar.github.io/2018/09/22/telegram-qq/">
+    <link rel="canonical" href="https://llldar.github.io/2017/08/12/apue-1/apue-1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -162,7 +162,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('post-bg-telegram-qq.jpg')
+        background-image: url('post-bg-apue-1.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -172,19 +172,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#qq" title="qq">qq</a>
+                          <a class="tag" href="/tags/#Unix" title="Unix">Unix</a>
                         
-                          <a class="tag" href="/tags/#Telegram" title="Telegram">Telegram</a>
-                        
-                          <a class="tag" href="/tags/#工具使用" title="工具使用">工具使用</a>
+                          <a class="tag" href="/tags/#APUE" title="APUE">APUE</a>
                         
 
                     </div>
-                    <h1>使用Telegram收发qq消息</h1>
-                    <h2 class="subheading">基于EH Forwarder Bot 2.0</h2>
+                    <h1>APUE读书笔记-1</h1>
+                    <h2 class="subheading">Unix系统基础</h2>
                     <span class="meta">
-                        Posted by Nathaniel on
-                        2018-09-22
+                        Posted by Nahtaniel on
+                        2017-08-12
                     </span>
                 </div>
             </div>
@@ -203,12 +201,34 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="使用Telegram收发qq消息"><a href="#使用Telegram收发qq消息" class="headerlink" title="使用Telegram收发qq消息"></a>使用Telegram收发qq消息</h3><p>跟上一篇内容类似，这里不多废话了。</p>
-<p>首先安装docker</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo curl -sSL https://get.docker.com/ | sh</div></pre></td></tr></table></figure>
-<p>然后安装CoolQ客户端</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker pull richardchien/cqhttp:latest</div></pre></td></tr></table></figure>
-<p>(施工中…)</p>
+                <h2 id="APUE读书笔记-1"><a href="#APUE读书笔记-1" class="headerlink" title="APUE读书笔记-1"></a>APUE读书笔记-1</h2><p>闲来无聊，想学习一个，提高一下自身的知识水平，据说Unix方面的神书主要有两本，分别为 Advanced Programming in the Unix Environment 和 Unix network programming 均为<a href="https://en.wikipedia.org/wiki/W._Richard_Stevens" target="_blank" rel="external">W. Richard Stevens</a>所著，那么，闲话不多说，开始读书吧。</p>
+<h3 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h3><p>被誉为神书总是有道理的，从第一章就可以看出来，本书的作者显然不像贝尔实验室中的大触们那么高冷，他的语言更加平实，贴近初学者的视角，从而使得书的内容简单易懂。</p>
+<p>下面是书后的问题：</p>
+<ol>
+<li><p>1.1  Verify on your system that the directories dot and dot-dot are not the same, except in theroot directory.</p>
+<p>这个问题很简单，分别在一个普通目录下执行<code>ls .</code>和<code>ls..</code>即可看出<code>..</code>为其上级目录，而<code>.</code>为当前目录。</p>
+<p>而在根目录<code>/</code>下二者输出内容一致，可见其为相同目录。</p>
+</li>
+<li><p>1.2  In the output from the program in Figure 1.6, what happened to the processes with processIDs 852 and 853?</p>
+<p>Fig1.6如下图</p>
+<p><img src="q2.jpg" alt="q2"></p>
+<p>可见该程序测试了<code>getpid()</code>函数的功能，即获取新的不重复的<code>pid(线程ID)</code>，在这里，我们可以发现获取了<code>pid 851</code>之后，获取到的是<code>pid 854</code>，那么根据多进程的理解，此时最合适的解释是其他的程序在两次执行获取<code>pid</code>的<code>./a.out</code>程序之间，</p>
+</li>
+<li><p>1.3  In Section 1.7, the argument to perror is defined with the ISO C attribute const, whereas the integer argument to strerror isn’t defined with this attribute. Why?</p>
+<p>两个函数定义如下图</p>
+<p><img src="q3.jpg" alt="q3"></p>
+<p>原以为这里有什么高深的地方，大概查了下，发现其实就是基础的<code>const</code>问题，所以这里来说，由于函数的传参机制是默认按值传递的，所以<code>strerror</code>函数传递的<code>errorno</code>值是原来<code>errorno</code>值的一份拷贝，因此不必进行<code>const</code>定义也可以保证外部的<code>errorno</code>不会被修改，而<code>perror</code>函数则传递的是指针参数，指针本身并不会被修改，但是指针所指向的区域，在没有前置<code>const</code>的修饰的情况下，是可能被函数修改的，因此在这里使用<code>const</code>来保证输入的字符串不被修改。</p>
+</li>
+<li><p>1.4  If the calendar time is stored as a signed 32-bit integer, in which year will it overflow? Howcan we extend the overflow point? Are these strategies compatible with existing applications?</p>
+<p>如果使用有符号的32位Int型整数存放时间的话，由于符号位要占用一位，那么可表示的从1970开始的最大秒数为$2^{31} = 2,147,483,648$ ，转换为人类可读的日期即为<code>GMT: Tuesday, January 19, 2038 3:14:08 AM</code>，而在我朝的话就是<code>GMT+08:00: Tuesday, January 19, 2038 11:14:08 AM</code>，这也是著名的<a href="https://en.wikipedia.org/wiki/Year_2038_problem" target="_blank" rel="external">2038年问题</a>，现有系统到2038年时会遇到一次巨大的危机，类似于2000年时千年之交时的<a href="https://en.wikipedia.org/wiki/Year_2000_problem" target="_blank" rel="external">千年虫问题</a>，都会导致时间相关的软件系统出现故障。终究这些问题的原因，都是程序员的短视和行业的迅速发展。拿<a href="https://en.wikipedia.org/wiki/IPv4_address_exhaustion" target="_blank" rel="external">ipv4地址枯竭问题</a>来说，在计算机行业刚刚开始发展的萌芽时期，计算机还都是富贵人家的奢侈品，总体能互相连接的计算机更是屈指可数，有谁能考虑到在将来$2^{32} = 4,294,967,296$个IP地址会不够用呢？</p>
+<p>回到问题，如果要解决这个2038问题，最简单的方法就是改换为64位的值，这样可以说是一劳永逸，因为这样的话到理论上到<code>292278994-08-17T07:12:55.807Z</code>才会出现下一次的时间问题，而届时人类是否还存在都是个问题，因此理论上是最佳的方案。</p>
+<p>然而很多情况下，我们需要与原有程序兼容，因此，改用无符号的32位整数也许是一个好方法，一方面我们很少需要表示1970年以前的时间，所以负的世界值用处不是很大，另一方面如果使用这个方法的话 ，不仅能与现有程序兼容，同时也将时间范围扩展到了<code>GMT: Sunday, February 7, 2106 6:28:16 AM</code>，给了我们充足的应对时间。</p>
+</li>
+<li><p>1.5  If the process time is stored as a signed 32-bit integer, and if the system counts 100 ticks per second, after how many days will the value overflow?</p>
+<p>公式: $2^{31}/(100\times3600\times24) = 248.55$ ，所以大约248天后该值会溢出。</p>
+<p>​</p>
+</li>
+</ol>
 
 
                 <hr>
@@ -216,14 +236,14 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2019/03/17/systemd-usage/" data-toggle="tooltip" data-placement="top" title="创建Systemd服务方法">&larr; Previous Post<br>
-                            <span>创建Systemd服务方法</span></a>
+                            <a href="/2017/08/15/apue-2/" data-toggle="tooltip" data-placement="top" title="APUE读书笔记-2">&larr; Previous Post<br>
+                            <span>APUE读书笔记-2</span></a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/2018/09/10/telegram-wechat/" data-toggle="tooltip" data-placement="top" title="使用Telegram收发微信消息">Next Post &rarr;<br>
-                            <span>使用Telegram收发微信消息</span></a>
+                            <a href="/2017/07/15/explore-git/explore-git/" data-toggle="tooltip" data-placement="top" title="探索Git">Next Post &rarr;<br>
+                            <span>探索Git</span></a>
                         </li>
                     
                 </ul>
@@ -241,20 +261,6 @@
             </div>  
  
       <!-- Sidebar Container -->
-        
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
-            </div>
         
 
     <!-- Sidebar Container -->
@@ -612,51 +618,28 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
 
 <!-- Baidu Tongji -->
 
 
-
-<script type="text/javascript">
-    function generateCatalog (selector) {
-        var P = $('div.post-container'),a,n,t,l,i,c;
-        a = P.find('h1,h2,h3,h4,h5,h6');
-        a.each(function () {
-            n = $(this).prop('tagName').toLowerCase();
-            i = "#"+$(this).prop('id');
-            t = $(this).text();
-            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
-            l = $('<li class="'+n+'_nav"></li>').append(c);
-            $(selector).append(l);
-        });
-        return true;    
-    }
-    generateCatalog(".catalog-body");
-    // toggle side catalog
-    $(".catalog-toggle").click((function(e){
-        e.preventDefault();
-        $('.side-catalog').toggleClass("fold")
-    }))
-    /*
-     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
-     * Fork by Hux to support padding
-     */
-    async("https://llldar.github.io/js/jquery.nav.js", function () {
-        $('.catalog-body').onePageNav({
-            currentClass: "active",
-            changeHash: !1,
-            easing: "easeOutExpo",
-            filter: "",
-            scrollSpeed: 800,
-            scrollOffset: 0,
-            scrollThreshold: .2,
-            begin: null,
-            end: null,
-            scrollChange: null,
-            padding: 80
-        });
-    });
-</script>
 
 
 
